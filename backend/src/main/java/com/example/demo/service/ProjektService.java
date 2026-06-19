@@ -1,0 +1,79 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.ProjektRequest;
+import com.example.demo.dto.ProjektResponse;
+import com.example.demo.entity.Benutzer;
+import com.example.demo.entity.Projekt;
+import com.example.demo.entity.enums.AufgabeStatus;
+import com.example.demo.entity.enums.ProjektStatus;
+import com.example.demo.repository.BenutzerRepository;
+import com.example.demo.repository.ProjektRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+public class ProjektService {
+    private final ProjektRepository projektRepository;
+    private final BenutzerRepository benutzerRepository;
+
+    public List<ProjektResponse> getMeineProjekte(Benutzer benutzer) {
+        return projektRepository.findByMitarbeitendeContaining(benutzer).stream()
+                .map(this::buildResponse)
+                .toList();
+    }
+
+    public ProjektResponse projektAnlegen(ProjektRequest request, Benutzer ersteller) {
+        Projekt projekt = new Projekt();
+        projekt.setName(request.getName());
+        projekt.setStatus(ProjektStatus.AKTIV);
+        projekt.setMandant(ersteller.getMandant());
+        projekt.getMitarbeitende().add(ersteller);
+        ersteller.getProjekte().add(projekt);
+
+        projektRepository.save(projekt);
+        benutzerRepository.save(ersteller);
+
+        return buildResponse(projekt);
+    }
+
+    public ProjektResponse projektArchivieren(UUID id) {
+        Projekt projekt = projektRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Projekt nicht gefunden"));
+        projekt.setStatus(ProjektStatus.ARCHIVIERT);
+        return buildResponse(projektRepository.save(projekt));
+    }
+
+    public ProjektResponse mitarbeiterZuordnen(UUID projektId, UUID benutzerId) {
+        Projekt projekt = projektRepository.findById(projektId)
+                .orElseThrow(() -> new RuntimeException("Projekt nicht gefunden"));
+        Benutzer benutzer = benutzerRepository.findById(benutzerId)
+                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
+
+        projekt.getMitarbeitende().add(benutzer);
+        benutzer.getProjekte().add(projekt);
+
+        projektRepository.save(projekt);
+        benutzerRepository.save(benutzer);
+
+        return buildResponse(projekt);
+    }
+
+    private ProjektResponse buildResponse(Projekt projekt) {
+        long alleAufgaben = projekt.getAufgaben().size();
+        long erledigteAufgaben = projekt.getAufgaben().stream()
+                .filter(aufgabe -> aufgabe.getStatus() == AufgabeStatus.ERLEDIGT)
+                .count();
+        double fortschritt = alleAufgaben == 0 ? 0.0 : (double) erledigteAufgaben / alleAufgaben * 100;
+
+        return new ProjektResponse(
+                projekt.getId(),
+                projekt.getName(),
+                projekt.getStatus(),
+                fortschritt
+        );
+    }
+}
