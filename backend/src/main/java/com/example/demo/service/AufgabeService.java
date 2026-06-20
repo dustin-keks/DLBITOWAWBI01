@@ -6,6 +6,7 @@ import com.example.demo.dto.AufgabeStatusRequest;
 import com.example.demo.entity.Aufgabe;
 import com.example.demo.entity.Projekt;
 import com.example.demo.entity.enums.AufgabeStatus;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.AufgabeRepository;
 import com.example.demo.repository.ProjektRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class AufgabeService {
 
     public AufgabeResponse aufgabeAnlegen(UUID projektId, AufgabeRequest request) {
         Projekt projekt = projektRepository.findById(projektId)
-                .orElseThrow(() -> new RuntimeException("Projekt nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
 
         Aufgabe aufgabe = new Aufgabe();
         aufgabe.setTitel(request.getTitel());
@@ -40,7 +41,7 @@ public class AufgabeService {
 
     public AufgabeResponse statusAendern(UUID aufgabeId, AufgabeStatusRequest request) {
         Aufgabe aufgabe = aufgabeRepository.findById(aufgabeId)
-                .orElseThrow(() -> new RuntimeException("Aufgabe nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
 
         aufgabe.setStatus(request.getStatus());
 

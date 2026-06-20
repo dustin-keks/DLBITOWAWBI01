@@ -6,6 +6,7 @@ import com.example.demo.entity.Benutzer;
 import com.example.demo.entity.Projekt;
 import com.example.demo.entity.enums.AufgabeStatus;
 import com.example.demo.entity.enums.ProjektStatus;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.BenutzerRepository;
 import com.example.demo.repository.ProjektRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +43,16 @@ public class ProjektService {
 
     public ProjektResponse projektArchivieren(UUID id) {
         Projekt projekt = projektRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Projekt nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
         projekt.setStatus(ProjektStatus.ARCHIVIERT);
         return buildResponse(projektRepository.save(projekt));
     }
 
     public ProjektResponse mitarbeiterZuordnen(UUID projektId, UUID benutzerId) {
         Projekt projekt = projektRepository.findById(projektId)
-                .orElseThrow(() -> new RuntimeException("Projekt nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
         Benutzer benutzer = benutzerRepository.findById(benutzerId)
-                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
 
         projekt.getMitarbeitende().add(benutzer);
         benutzer.getProjekte().add(projekt);

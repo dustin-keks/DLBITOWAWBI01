@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.BenutzerRequest;
 import com.example.demo.dto.BenutzerResponse;
 import com.example.demo.entity.Benutzer;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.BenutzerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +37,7 @@ public class BenutzerService {
 
     public BenutzerResponse benutzerAktualisieren(UUID id, BenutzerRequest request) {
         Benutzer benutzer = benutzerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Benutzer nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
 
         benutzer.setName(request.getName());
         benutzer.setEmail(request.getEmail());
