@@ -8,7 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProjektRepository extends JpaRepository<Projekt, UUID> {
-    List<Projekt> findByMandantId(UUID mandantId);
-
     List<Projekt> findByMitarbeitendeContaining(Benutzer benutzer);
 }
