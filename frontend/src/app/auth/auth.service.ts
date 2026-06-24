@@ -6,7 +6,7 @@ import {LoginResponse} from './login-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:8000/api/auth';
+  private readonly apiUrl = 'http://localhost:8080/api/auth';
 
   readonly rolle  = signal<string | null>(localStorage.getItem('rolle'));
   readonly name = signal<string | null>(localStorage.getItem('name'));
