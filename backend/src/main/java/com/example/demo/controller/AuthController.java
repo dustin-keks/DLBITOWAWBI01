@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.LoginResponse;
+import com.example.demo.entity.Benutzer;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,9 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPasswort())
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-        String token = jwtUtil.generateToken(userDetails);
+        Benutzer benutzer = (Benutzer) userDetailsService.loadUserByUsername(request.getEmail());
+        String token = jwtUtil.generateToken(benutzer);
 
-        return ResponseEntity.ok(new LoginResponse(token));
+        return ResponseEntity.ok(new LoginResponse(token, benutzer.getName(), benutzer.getRolle()));
     }
 }
