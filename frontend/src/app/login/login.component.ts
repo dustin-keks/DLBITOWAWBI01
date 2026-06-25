@@ -21,7 +21,7 @@ interface LoginModel {
     MatInputModule,
     MatButtonModule
   ],
-  templateUrl: `./login.component.html`
+  templateUrl: './login.component.html'
 })
 export class LoginComponent{
   readonly model = signal<LoginModel>({email: '', passwort: ''});

@@ -1,33 +1,35 @@
-<div class="login-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
+<div class="row justify-content-center align-items-center mt-5">
+  <div class="col-6">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Login</mat-card-title>
+      </mat-card-header>
 
-    <mat-card-content>
       <form (submit)="onSubmit($event)">
-        <mat-form-field appearance="outline">
-          <mat-label>E-Mail-Adresse</mat-label>
-          <input matInput type="email" [formField]="loginForm.email" autocomplete="username">
-          @if (loginForm.email().touched() && loginForm.email().invalid()) {
-            <mat-error>{{loginForm.email().errors()[0].message}}</mat-error>
+        <mat-card-content class="d-flex flex-column">
+          <mat-form-field>
+            <mat-label>E-Mail-Adresse</mat-label>
+            <input matInput type="email" [formField]="loginForm.email" autocomplete="username">
+            @if (loginForm.email().touched() && loginForm.email().invalid()) {
+              <mat-error>{{loginForm.email().errors()[0].message}}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Passwort</mat-label>
+            <input matInput type="password" [formField]="loginForm.passwort" autocomplete="current-password">
+            @if (loginForm.passwort().touched() && loginForm.passwort().invalid()) {
+              <mat-error>Das Passwort ist erforderlich</mat-error>
+            }
+          </mat-form-field>
+
+          @if (fehler()) {
+            <mat-error>{{ fehler() }}</mat-error>
           }
-        </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Passwort</mat-label>
-          <input matInput type="password" [formField]="loginForm.passwort" autocomplete="current-password">
-          @if (loginForm.passwort().touched() && loginForm.passwort().invalid()) {
-            <mat-error>Das Passwort ist erforderlich</mat-error>
-          }
-        </mat-form-field>
-
-        @if (fehler()) {
-          <mat-error>{{ fehler() }}</mat-error>
-        }
-
-        <button mat-button type="submit">Anmelden</button>
+          <button matButton="filled" type="submit">Anmelden</button>
+        </mat-card-content>
       </form>
-    </mat-card-content>
-  </mat-card>
+    </mat-card>
+  </div>
 </div>
