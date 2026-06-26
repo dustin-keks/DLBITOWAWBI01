@@ -4,3 +4,7 @@ export interface ProjektResponse {
   status: 'AKTIV' | 'ARCHIVIERT';
   fortschritt: number;
 }
+
+export interface ProjektRequest {
+  name: string;
+}

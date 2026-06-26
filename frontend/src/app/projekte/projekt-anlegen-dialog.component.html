@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Neues Projekt anlegen</h1>
+
+<mat-dialog-content>
+  <form id="projektAnlegenForm" (submit)="speichern($event)">
+    <mat-form-field class="w-100">
+      <mat-label>Projektname</mat-label>
+      <input matInput type="text" [formField]="projektForm.name" autocomplete="off">
+
+      @if (projektForm.name().touched() && projektForm.name().invalid()) {
+        <mat-error>{{projektForm.name().errors()[0].message}}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton (click)="abbrechen()">Abbrechen</button>
+  <button matButton="filled" type="submit" form="projektAnlegenForm">
+    Neues Projekt anlegen
+  </button>
+</mat-dialog-actions>

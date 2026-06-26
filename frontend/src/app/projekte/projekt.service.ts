@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {ProjektResponse} from './projekt.model';
+import {ProjektRequest, ProjektResponse} from './projekt.model';
 
 @Injectable({providedIn: 'root'})
 export class ProjektService {
@@ -10,5 +10,9 @@ export class ProjektService {
 
   getMeineProjekte(): Observable<ProjektResponse[]> {
     return this.http.get<ProjektResponse[]>(this.apiUrl)
+  }
+
+  projektAnlegen(req: ProjektRequest): Observable<ProjektResponse> {
+    return this.http.post<ProjektResponse>(this.apiUrl, req)
   }
 }
