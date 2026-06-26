@@ -9,6 +9,7 @@ import com.example.demo.entity.enums.ProjektStatus;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.BenutzerRepository;
 import com.example.demo.repository.ProjektRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +28,20 @@ public class ProjektService {
                 .toList();
     }
 
+    @Transactional
     public ProjektResponse projektAnlegen(ProjektRequest request, Benutzer ersteller) {
+        Benutzer benutzer = benutzerRepository.findById(ersteller.getId())
+                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
+
         Projekt projekt = new Projekt();
         projekt.setName(request.getName());
         projekt.setStatus(ProjektStatus.AKTIV);
-        projekt.setMandant(ersteller.getMandant());
-        projekt.getMitarbeitende().add(ersteller);
-        ersteller.getProjekte().add(projekt);
+        projekt.setMandant(benutzer.getMandant());
 
         projektRepository.save(projekt);
-        benutzerRepository.save(ersteller);
+
+        benutzer.getProjekte().add(projekt);
+        benutzerRepository.save(benutzer);
 
         return buildResponse(projekt);
     }
