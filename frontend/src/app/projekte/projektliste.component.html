@@ -1,1 +1,30 @@
 <h1>Projektliste</h1>
+
+@if (loading()) {
+  <mat-spinner></mat-spinner>
+} @else if (fehler()) {
+  <p class="text-danger">
+    {{ fehler() }}
+  </p>
+} @else if (projekte().length === 0) {
+  <p class="text-warning">
+    Du bist noch keinem Projekt zugeordnet.
+  </p>
+} @else {
+  <div class="row">
+    @for (projekt of projekte(); track projekt.id) {
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ projekt.name }}</mat-card-title>
+            <mat-card-subtitle>{{ projekt.status }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>Fortschritt: {{ projekt.fortschritt.toFixed(2) }}</p>
+            <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
+  </div>
+}
