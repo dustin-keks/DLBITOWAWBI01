@@ -8,3 +8,7 @@ export interface ProjektResponse {
 export interface ProjektRequest {
   name: string;
 }
+
+export interface ProjektStatusRequest {
+  status: 'AKTIV' | 'ARCHIVIERT';
+}

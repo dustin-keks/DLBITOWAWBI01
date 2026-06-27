@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.ProjektRequest;
 import com.example.demo.dto.ProjektResponse;
+import com.example.demo.dto.ProjektStatusRequest;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.service.ProjektService;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,11 @@ public class ProjektController {
         return ResponseEntity.ok(projektService.projektAnlegen(request, benutzer));
     }
 
-    @PutMapping("/{id}/archivieren")
+    @PatchMapping("/{id}/status")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
-    public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID id) {
-        return ResponseEntity.ok(projektService.projektArchivieren(id));
+    public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID id,
+                                                              @RequestBody ProjektStatusRequest req) {
+        return ResponseEntity.ok(projektService.statusAendern(id, req.getStatus()));
     }
 
     @PostMapping("/{projektId}/mitarbeiter/{benutzerId}")

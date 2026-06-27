@@ -1,7 +1,14 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {ProjektService} from './projekt.service';
 import {ProjektResponse} from './projekt.model';
-import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from '@angular/material/card';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardSubtitle,
+  MatCardTitle
+} from '@angular/material/card';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {ProjektAnlegenDialogComponent} from './projekt-anlegen-dialog.component';
@@ -20,7 +27,8 @@ import {AuthService} from '../auth/auth.service';
     MatCardContent,
     MatProgressBar,
     MatProgressSpinner,
-    MatButton
+    MatButton,
+    MatCardActions
   ]
 })
 export class ProjektlisteComponent implements OnInit {
@@ -56,13 +64,26 @@ export class ProjektlisteComponent implements OnInit {
     dialog.afterClosed().subscribe((name: string | undefined) => {
       if (name) {
         this.projektService.projektAnlegen({name}).subscribe({
-          next: (data) => {
-            this.projekte.update((liste) => [...liste, data]);
+          next: (res) => {
+            this.projekte.update((liste) => [...liste, res]);
           },
           error: () => {
             this.fehler.set('Das Projekt konnte nicht angelegt werden.');
           }
         })
+      }
+    })
+  }
+
+  statusAendern(projekt: ProjektResponse, status: 'AKTIV' | 'ARCHIVIERT'): void {
+    this.projektService.statusAendern(projekt.id, status).subscribe({
+      next: (res) => {
+        this.projekte.update((liste) =>
+          liste.map((proj) => (proj.id === res.id ? res : proj))
+        );
+      },
+      error: () => {
+        this.fehler.set('Der Projektstatus konnte nicht geändert werden.');
       }
     })
   }

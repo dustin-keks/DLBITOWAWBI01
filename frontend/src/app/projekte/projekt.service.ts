@@ -9,10 +9,14 @@ export class ProjektService {
   private http = inject(HttpClient);
 
   getMeineProjekte(): Observable<ProjektResponse[]> {
-    return this.http.get<ProjektResponse[]>(this.apiUrl)
+    return this.http.get<ProjektResponse[]>(this.apiUrl);
   }
 
   projektAnlegen(req: ProjektRequest): Observable<ProjektResponse> {
-    return this.http.post<ProjektResponse>(this.apiUrl, req)
+    return this.http.post<ProjektResponse>(this.apiUrl, req);
+  }
+
+  statusAendern(id: string, status: 'AKTIV' | 'ARCHIVIERT'): Observable<ProjektResponse> {
+    return this.http.patch<ProjektResponse>(`${this.apiUrl}/${id}/status`, {status});
   }
 }
