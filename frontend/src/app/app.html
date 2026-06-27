@@ -1,3 +1,24 @@
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<header>
+  <div class="container border-bottom">
+    <mat-toolbar class="row justify-content-between">
+      <div class="col">
+        Dira
+      </div>
+
+      @if (isAngemeldet()) {
+        <div class="col-auto">
+          <span class="text-muted">Hallo {{benutzername()}}!</span>
+        </div>
+        <div class="col-auto">
+          <button matButton="outlined" (click)="logout()">Abmelden</button>
+        </div>
+      }
+    </mat-toolbar>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>
