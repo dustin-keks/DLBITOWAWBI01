@@ -46,10 +46,11 @@ public class ProjektService {
         return buildResponse(projekt);
     }
 
-    public ProjektResponse projektArchivieren(UUID id) {
+    @Transactional
+    public ProjektResponse statusAendern(UUID id, ProjektStatus status) {
         Projekt projekt = projektRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
-        projekt.setStatus(ProjektStatus.ARCHIVIERT);
+        projekt.setStatus(status);
         return buildResponse(projektRepository.save(projekt));
     }
 
