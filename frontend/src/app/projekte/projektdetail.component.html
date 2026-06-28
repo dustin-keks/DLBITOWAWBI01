@@ -11,17 +11,19 @@
     @for (aufgabe of aufgaben(); track aufgabe.id) {
       <mat-list-item>
         <span matListItemTitle>{{aufgabe.titel}}</span>
-        <mat-select
-          matListItemMeta
-          [value]="aufgabe.status"
-          (selectionChange)="statusAendern(aufgabe, $event.value)"
-        >
-          @for (option of statusOptionen; track option) {
-            <mat-option [value]="option">
-              {{option}}
-            </mat-option>
-          }
-        </mat-select>
+        <span matListItemLine>
+          <mat-select
+
+            [value]="aufgabe.status"
+            (selectionChange)="statusAendern(aufgabe, $event.value)"
+          >
+            @for (option of statusOptionen; track option) {
+              <mat-option [value]="option">
+                {{option}}
+              </mat-option>
+            }
+          </mat-select>
+        </span>
       </mat-list-item>
     }
   </mat-list>
@@ -29,4 +31,8 @@
 
 <button matButton="filled" (click)="aufgabeAnlegenDialog()">
   Neue Aufgabe anlegen
+</button>
+
+<button matButton="outlined" routerLink="/projekte">
+  Zurück zu allen Projekten
 </button>

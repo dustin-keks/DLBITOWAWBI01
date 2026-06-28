@@ -3,10 +3,11 @@ import {AufgabeService} from '../aufgaben/aufgabe.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AufgabeResponse, AufgabeStatus} from '../aufgaben/aufgabe.model';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatList, MatListItem, MatListItemMeta, MatListItemTitle} from '@angular/material/list';
+import {MatList, MatListItem, MatListItemLine, MatListItemTitle} from '@angular/material/list';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {AufgabeAnlegenDialogComponent} from '../aufgaben/aufgabe-anlegen-dialog.component';
 import {MatButton} from '@angular/material/button';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-projektdetail',
@@ -17,9 +18,10 @@ import {MatButton} from '@angular/material/button';
     MatListItem,
     MatListItemTitle,
     MatSelect,
-    MatListItemMeta,
     MatOption,
-    MatButton
+    MatButton,
+    MatListItemLine,
+    RouterLink
   ]
 })
 export class ProjektdetailComponent implements OnInit {
