@@ -32,11 +32,11 @@ public class ProjektController {
         return ResponseEntity.ok(projektService.projektAnlegen(request, benutzer));
     }
 
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/{projektId}/status")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
-    public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID id,
+    public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID projektId,
                                                               @RequestBody ProjektStatusRequest req) {
-        return ResponseEntity.ok(projektService.statusAendern(id, req.getStatus()));
+        return ResponseEntity.ok(projektService.statusAendern(projektId, req.getStatus()));
     }
 
     @PostMapping("/{projektId}/mitarbeiter/{benutzerId}")
