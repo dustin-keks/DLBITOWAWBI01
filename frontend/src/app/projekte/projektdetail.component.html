@@ -1,0 +1,32 @@
+<h1>{{projektName()}}</h1>
+
+@if (loading()) {
+  <mat-spinner></mat-spinner>
+} @else if (fehler()) {
+  <p class="text-danger">{{fehler()}}</p>
+} @else if (aufgaben().length === 0) {
+  <p class="text-danger">Es sind noch keine Aufgaben vorhanden.</p>
+} @else {
+  <mat-list>
+    @for (aufgabe of aufgaben(); track aufgabe.id) {
+      <mat-list-item>
+        <span matListItemTitle>{{aufgabe.titel}}</span>
+        <mat-select
+          matListItemMeta
+          [value]="aufgabe.status"
+          (selectionChange)="statusAendern(aufgabe, $event.value)"
+        >
+          @for (option of statusOptionen; track option) {
+            <mat-option [value]="option">
+              {{option}}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-list-item>
+    }
+  </mat-list>
+}
+
+<button matButton="filled" (click)="aufgabeAnlegenDialog()">
+  Neue Aufgabe anlegen
+</button>

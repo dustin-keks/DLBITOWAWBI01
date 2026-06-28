@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Neue Aufgabe anlegen</h1>
+
+<mat-dialog-content>
+  <form id="aufgabeAnlegenForm" (submit)="speichern($event)">
+    <mat-form-field class="w-100">
+      <mat-label>Titel der Aufgabe</mat-label>
+      <input matInput type="text" [formField]="aufgabeForm.titel" autocomplete="off">
+
+      @if (aufgabeForm.titel().touched() && aufgabeForm.titel().invalid()) {
+        <mat-error>{{aufgabeForm.titel().errors()[0].message}}</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button matButton type="button" (click)="abbrechen()">Abbrechen</button>
+  <button matButton="filled" type="submit" form="aufgabeAnlegenForm">
+    Neue Aufgabe anlegen
+  </button>
+</mat-dialog-actions>

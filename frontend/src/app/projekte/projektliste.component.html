@@ -25,6 +25,12 @@
             <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
           </mat-card-content>
 
+          <mat-card-footer>
+            <button matButton (click)="projektAnzeigen(projekt)">
+              Projekt anzeigen
+            </button>
+          </mat-card-footer>
+
           @if (kannProjektAnlegen()) {
             <mat-card-actions>
               @if (projekt.status === 'AKTIV') {

@@ -5,6 +5,7 @@ import {
   MatCard,
   MatCardActions,
   MatCardContent,
+  MatCardFooter,
   MatCardHeader,
   MatCardSubtitle,
   MatCardTitle
@@ -15,6 +16,7 @@ import {ProjektAnlegenDialogComponent} from './projekt-anlegen-dialog.component'
 import {MatButton} from '@angular/material/button';
 import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../auth/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-projektliste',
@@ -28,13 +30,15 @@ import {AuthService} from '../auth/auth.service';
     MatProgressBar,
     MatProgressSpinner,
     MatButton,
-    MatCardActions
+    MatCardActions,
+    MatCardFooter
   ]
 })
 export class ProjektlisteComponent implements OnInit {
   private authService = inject(AuthService);
   private projektService = inject(ProjektService);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   readonly projekte = signal<ProjektResponse[]>([]);
   readonly loading = signal(true);
@@ -86,5 +90,9 @@ export class ProjektlisteComponent implements OnInit {
         this.fehler.set('Der Projektstatus konnte nicht geändert werden.');
       }
     })
+  }
+
+  projektAnzeigen(projekt: ProjektResponse):void {
+    this.router.navigate(['/projekte', projekt.id], {state: {projektName: projekt.name}});
   }
 }

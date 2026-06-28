@@ -1,13 +1,12 @@
-import {Component, ChangeDetectionStrategy, inject, computed} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {Router, RouterOutlet} from '@angular/router';
 import {AuthService} from './auth/auth.service';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbar, MatButton, MatIcon],
+  imports: [RouterOutlet, MatToolbar, MatButton],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss'
