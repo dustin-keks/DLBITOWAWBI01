@@ -1,0 +1,42 @@
+<h1>Benutzerverwaltung</h1>
+
+@if (loading()) {
+  <mat-spinner></mat-spinner>
+} @else if (fehler()) {
+  <p class="text-danger">{{fehler()}}</p>
+} @else if (benutzer().length === 0) {
+  <p class="text-danger">Es sind noch keine Benutzer vorhanden.</p>
+} @else {
+  <mat-table [dataSource]="benutzer()">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let benutzer">{{benutzer.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <mat-header-cell *matHeaderCellDef>E-Mail-Adresse</mat-header-cell>
+      <mat-cell *matCellDef="let benutzer">{{benutzer.email}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="rolle">
+      <mat-header-cell *matHeaderCellDef>Benutzerrolle</mat-header-cell>
+      <mat-cell *matCellDef="let benutzer">{{benutzer.rolle}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bearbeiten">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let benutzer">
+        <button matButton (click)="benutzerBearbeitenDialog(benutzer)">
+          Benutzer bearbeiten
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="tabelleSpalten"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tabelleSpalten"></mat-row>
+  </mat-table>
+}
+
+<button matButton="filled" (click)="benutzerAnlegenDialog()">
+  Neuen Benutzer anlegen
+</button>

@@ -6,6 +6,13 @@
       </div>
 
       @if (isAngemeldet()) {
+        @if (isAdmin()) {
+          <div class="col-auto">
+            <button matButton="filled" routerLink="/admin/benutzer">
+              Zur Benutzerverwaltung
+            </button>
+          </div>
+        }
         <div class="col-auto">
           <span class="text-muted">Hallo {{benutzername()}}!</span>
         </div>
