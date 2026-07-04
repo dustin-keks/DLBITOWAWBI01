@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BenutzerResponse;
 import com.example.demo.dto.ProjektRequest;
 import com.example.demo.dto.ProjektResponse;
 import com.example.demo.entity.Benutzer;
@@ -69,6 +70,20 @@ public class ProjektService {
         return buildResponse(projekt);
     }
 
+    public ProjektResponse getProjekt(UUID projektId, Benutzer benutzer) {
+        Projekt projekt = projektRepository.findById(projektId)
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
+
+        boolean istMitglied = projekt.getMitarbeitende().stream()
+                .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));
+
+        if (!istMitglied) {
+            throw new NotFoundException("Du hast keinen Zugriff auf dieses Projekt.");
+        }
+
+        return buildResponse(projekt);
+    }
+
     private ProjektResponse buildResponse(Projekt projekt) {
         long alleAufgaben = projekt.getAufgaben().size();
         long erledigteAufgaben = projekt.getAufgaben().stream()
@@ -76,11 +91,16 @@ public class ProjektService {
                 .count();
         double fortschritt = alleAufgaben == 0 ? 0.0 : (double) erledigteAufgaben / alleAufgaben * 100;
 
+        List<BenutzerResponse> mitarbeitende = projekt.getMitarbeitende().stream()
+                .map(benutzer -> new BenutzerResponse(benutzer.getId(), benutzer.getName(), benutzer.getEmail(), benutzer.getRolle()))
+                .toList();
+
         return new ProjektResponse(
                 projekt.getId(),
                 projekt.getName(),
                 projekt.getStatus(),
-                fortschritt
+                fortschritt,
+                mitarbeitende
         );
     }
 }

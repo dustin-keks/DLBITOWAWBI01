@@ -32,6 +32,12 @@ public class ProjektController {
         return ResponseEntity.ok(projektService.projektAnlegen(request, benutzer));
     }
 
+    @GetMapping("/{projektId}")
+    public ResponseEntity<ProjektResponse> getProjekt(@PathVariable UUID projektId,
+                                                      @AuthenticationPrincipal Benutzer benutzer) {
+        return ResponseEntity.ok(projektService.getProjekt(projektId, benutzer));
+    }
+
     @PatchMapping("/{projektId}/status")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
     public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID projektId,
