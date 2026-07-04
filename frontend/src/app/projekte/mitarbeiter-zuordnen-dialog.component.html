@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>Mitarbeiter einem Projekt zuordnen</h1>
+
+<mat-dialog-content>
+  @if (loading()) {
+    <mat-spinner></mat-spinner>
+  }
+  @else if (fehler()) {
+    <p class="text-danger">{{fehler()}}</p>
+  } @else {
+    <mat-form-field class="w-100">
+      <mat-label>Mitarbeiter</mat-label>
+      <mat-select [value]="ausgewaehlt()" (selectionChange)="ausgewaehlt.set($event.value)">
+        @for (user of benutzer(); track user.id) {
+          <mat-option [value]="user">{{user.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button matButton type="button" (click)="abbrechen()">Abbrechen</button>
+  <button matButton="filled" type="button" [disabled]="!ausgewaehlt()" (click)="zuordnen()">
+    Mitarbeiter zuordnen
+  </button>
+</mat-dialog-actions>

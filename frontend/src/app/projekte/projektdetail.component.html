@@ -1,4 +1,4 @@
-<h1>{{projektName()}}</h1>
+<h1>Projektdetails "{{projektName()}}"</h1>
 
 @if (loading()) {
   <mat-spinner></mat-spinner>
@@ -27,11 +27,26 @@
       </mat-list-item>
     }
   </mat-list>
+
+  @if (projekt()?.mitarbeitende?.length) {
+    <h2>Mitarbeitende in diesem Projekt</h2>
+    <mat-list>
+      @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
+        <mat-list-item>{{mitarbeiter.name}}</mat-list-item>
+      }
+    </mat-list>
+  }
 }
 
 <button matButton="filled" (click)="aufgabeAnlegenDialog()">
   Neue Aufgabe anlegen
 </button>
+
+@if (kannMitarbeiterZuordnen()) {
+  <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
+    Mitarbeiter zuordnen
+  </button>
+}
 
 <button matButton="outlined" routerLink="/projekte">
   Zurück zu allen Projekten

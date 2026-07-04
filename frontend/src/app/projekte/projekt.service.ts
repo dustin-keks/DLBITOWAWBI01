@@ -12,11 +12,19 @@ export class ProjektService {
     return this.http.get<ProjektResponse[]>(this.apiUrl);
   }
 
+  getProjekt(id: string): Observable<ProjektResponse> {
+    return this.http.get<ProjektResponse>(`${this.apiUrl}/${id}`);
+  }
+
   projektAnlegen(req: ProjektRequest): Observable<ProjektResponse> {
     return this.http.post<ProjektResponse>(this.apiUrl, req);
   }
 
   statusAendern(id: string, status: 'AKTIV' | 'ARCHIVIERT'): Observable<ProjektResponse> {
     return this.http.patch<ProjektResponse>(`${this.apiUrl}/${id}/status`, {status});
+  }
+
+  mitarbeiterZuordnen(projektId: string, benutzerId: string): Observable<ProjektResponse> {
+    return this.http.post<ProjektResponse>(`${this.apiUrl}/${projektId}/mitarbeiter/${benutzerId}`, {});
   }
 }
