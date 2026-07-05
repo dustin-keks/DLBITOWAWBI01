@@ -12,6 +12,7 @@ import com.example.demo.repository.BenutzerRepository;
 import com.example.demo.repository.ProjektRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class ProjektService {
                 .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));
 
         if (!istMitglied) {
-            throw new NotFoundException("Du hast keinen Zugriff auf dieses Projekt.");
+            throw new AccessDeniedException("Du hast keinen Zugriff auf dieses Projekt.");
         }
 
         return buildResponse(projekt);
