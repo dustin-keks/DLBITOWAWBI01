@@ -38,6 +38,13 @@ public class ProjektController {
         return ResponseEntity.ok(projektService.getProjekt(projektId, benutzer));
     }
 
+    @PutMapping("/{projektId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
+    public ResponseEntity<ProjektResponse> projektAktualisieren(@PathVariable UUID projektId,
+                                                                @RequestBody ProjektRequest request) {
+        return ResponseEntity.ok(projektService.projektAktualisieren(projektId, request));
+    }
+
     @PatchMapping("/{projektId}/status")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
     public ResponseEntity<ProjektResponse> projektArchivieren(@PathVariable UUID projektId,

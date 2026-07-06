@@ -71,6 +71,14 @@ public class ProjektService {
         return buildResponse(projekt);
     }
 
+    public ProjektResponse projektAktualisieren(UUID projektId, ProjektRequest request) {
+        Projekt projekt = projektRepository.findById(projektId)
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
+
+        projekt.setName(request.getName());
+        return buildResponse(projektRepository.save(projekt));
+    }
+
     public ProjektResponse getProjekt(UUID projektId, Benutzer benutzer) {
         Projekt projekt = projektRepository.findById(projektId)
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
