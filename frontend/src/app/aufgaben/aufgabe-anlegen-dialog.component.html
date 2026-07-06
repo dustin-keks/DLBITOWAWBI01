@@ -1,4 +1,6 @@
-<h1 mat-dialog-title>Neue Aufgabe anlegen</h1>
+<h1 mat-dialog-title>
+  {{ aufgabe ? 'Aufgabe bearbeiten' : 'Neue Aufgabe anlegen' }}
+</h1>
 
 <mat-dialog-content>
   <form id="aufgabeAnlegenForm" (submit)="speichern($event)">
@@ -16,6 +18,6 @@
 <mat-dialog-actions>
   <button matButton type="button" (click)="abbrechen()">Abbrechen</button>
   <button matButton="filled" type="submit" form="aufgabeAnlegenForm">
-    Neue Aufgabe anlegen
+    {{ aufgabe ? 'Aufgabe speichern' : 'Neue Aufgabe anlegen' }}
   </button>
 </mat-dialog-actions>

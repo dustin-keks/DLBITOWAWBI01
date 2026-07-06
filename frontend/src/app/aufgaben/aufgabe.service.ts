@@ -16,6 +16,10 @@ export class AufgabeService {
     return this.http.post<AufgabeResponse>(`${this.apiUrl}/${projektId}/aufgaben`, request);
   }
 
+  aufgabeAktualisieren(projektId: string, aufgabeId: string, request: AufgabeRequest): Observable<AufgabeResponse> {
+    return this.http.put<AufgabeResponse>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}`, request);
+  }
+
   statusAendern(projektId: string, aufgabeId: string, status: AufgabeStatus):Observable<AufgabeResponse> {
     return this.http.put<AufgabeResponse>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}/status`, {status});
   }

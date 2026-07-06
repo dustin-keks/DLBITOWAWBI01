@@ -70,7 +70,10 @@ export class ProjektdetailComponent implements OnInit {
   }
 
   aufgabeAnlegenDialog(): void {
-    const dialog = this.dialog.open(AufgabeAnlegenDialogComponent, {width: '400px'});
+    const dialog = this.dialog.open(AufgabeAnlegenDialogComponent, {
+      width: '400px',
+      data: null
+    });
 
     dialog.afterClosed().subscribe((titel: string | undefined) => {
       if (titel) {
@@ -82,6 +85,27 @@ export class ProjektdetailComponent implements OnInit {
             this.fehler.set('Die Aufgabe konnte nicht angelegt werden.');
           }
         });
+      }
+    });
+  }
+
+  aufgabeBearbeitenDialog(aufgabe: AufgabeResponse): void {
+    const dialog = this.dialog.open(AufgabeAnlegenDialogComponent, {
+      width: '400px',
+      data: aufgabe
+    });
+
+    dialog.afterClosed().subscribe((titel: string | undefined) => {
+      if (titel) {
+        this.aufgabeService.aufgabeAktualisieren(this.projektId(), aufgabe.id, {titel}).subscribe({
+          next: (aktualisierteAufgabe) => {
+            this.aufgaben.update((liste) =>
+              liste.map((eintrag) => (eintrag.id === aktualisierteAufgabe.id ? aktualisierteAufgabe : eintrag))
+            );
+          }, error: () => {
+            this.fehler.set('Die Aufgabe konnte nicht aktualisiert werden.');
+          }
+        })
       }
     });
   }

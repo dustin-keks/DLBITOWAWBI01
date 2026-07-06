@@ -1,8 +1,15 @@
 import {Component, inject, signal} from '@angular/core';
-import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from '@angular/material/dialog';
 import {form, FormField, required} from '@angular/forms/signals';
 import {MatError, MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
+import {AufgabeResponse} from './aufgabe.model';
 
 interface AufgabeAnlegenModel {
   titel: string;
@@ -25,8 +32,9 @@ interface AufgabeAnlegenModel {
 })
 export class AufgabeAnlegenDialogComponent {
   private dialog = inject(MatDialogRef<AufgabeAnlegenDialogComponent>);
+  readonly aufgabe = inject<AufgabeResponse | null>(MAT_DIALOG_DATA);
 
-  readonly model = signal<AufgabeAnlegenModel>({titel: ''});
+  readonly model = signal<AufgabeAnlegenModel>({titel: this.aufgabe?.titel ?? ''});
   readonly aufgabeForm = form(this.model, (schemaPath) => {
     required(schemaPath.titel, {message: 'Der Titel ist erforderlich.'});
   });
