@@ -7,58 +7,73 @@
 } @else if (aufgaben().length === 0) {
   <p class="text-danger">Es sind noch keine Aufgaben vorhanden.</p>
 } @else {
-  <mat-list>
-    @for (aufgabe of aufgaben(); track aufgabe.id) {
-      <mat-list-item>
-        <span matListItemTitle>{{aufgabe.titel}}</span>
-        <span matListItemLine>
-          <mat-select
+  <mat-table [dataSource]="aufgaben()">
+    <ng-container matColumnDef="titel">
+      <mat-header-cell *matHeaderCellDef>Titel</mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">{{aufgabe.titel}}</mat-cell>
+    </ng-container>
 
-            [value]="aufgabe.status"
-            (selectionChange)="statusAendern(aufgabe, $event.value)"
-          >
-            @for (option of statusOptionen; track option) {
-              <mat-option [value]="option">
-                {{option}}
-              </mat-option>
-            }
-          </mat-select>
-        </span>
-        <span>
-          <button matButton type="button" (click)="aufgabeBearbeitenDialog(aufgabe)">
-            Aufgabe Bearbeiten
-          </button>
-        </span>
-      </mat-list-item>
-    }
-  </mat-list>
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">
+        <mat-select
+          [value]="aufgabe.status"
+          (selectionChange)="statusAendern(aufgabe, $event.value)"
+        >
+          @for (option of statusOptionen; track option) {
+            <mat-option [value]="option">{{option}}</mat-option>
+          }
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="bearbeiten">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">
+        <button matButton type="button" (click)="aufgabeBearbeitenDialog(aufgabe)">Aufgabe bearbeiten</button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="aufgabenSpalten"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: aufgabenSpalten"></mat-row>
+  </mat-table>
+
+  <div class="row">
+    <div class="col-auto">
+      <button matButton="filled" (click)="aufgabeAnlegenDialog()">
+        Neue Aufgabe anlegen
+      </button>
+    </div>
+    <div class="col-auto">
+      @if (kannProjektBearbeiten()) {
+        <button matButton="filled" (click)="projektBearbeitenDialog()">
+          Projekt bearbeiten
+        </button>
+      }
+    </div>
+  </div>
 
   @if (projekt()?.mitarbeitende?.length) {
-    <h2>Mitarbeitende in diesem Projekt</h2>
+    <h2 class="mt-5">Mitarbeitende in diesem Projekt</h2>
+
     <mat-list>
       @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
         <mat-list-item>{{mitarbeiter.name}}</mat-list-item>
       }
     </mat-list>
+
+    @if (kannMitarbeiterZuordnen()) {
+      <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
+        Mitarbeiter zuordnen
+      </button>
+    }
   }
 }
 
-<button matButton="filled" (click)="aufgabeAnlegenDialog()">
-  Neue Aufgabe anlegen
-</button>
-
-@if (kannMitarbeiterZuordnen()) {
-  <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
-    Mitarbeiter zuordnen
-  </button>
-}
-
-@if (kannProjektBearbeiten()) {
-  <button matButton="filled" (click)="projektBearbeitenDialog()">
-    Projekt bearbeiten
-  </button>
-}
-
-<button matButton="outlined" routerLink="/projekte">
-  Zurück zu allen Projekten
-</button>
+<div class="row mt-5">
+  <div class="col">
+    <button matButton="outlined" routerLink="/projekte">
+      Zurück zu allen Projekten
+    </button>
+  </div>
+</div>

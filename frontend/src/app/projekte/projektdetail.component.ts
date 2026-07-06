@@ -3,7 +3,7 @@ import {AufgabeService} from '../aufgaben/aufgabe.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AufgabeResponse, AufgabeStatus} from '../aufgaben/aufgabe.model';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatList, MatListItem, MatListItemLine, MatListItemTitle} from '@angular/material/list';
+import {MatList, MatListItem} from '@angular/material/list';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {AufgabeAnlegenDialogComponent} from '../aufgaben/aufgabe-anlegen-dialog.component';
 import {MatButton} from '@angular/material/button';
@@ -15,6 +15,18 @@ import {AuthService} from '../auth/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ProjektResponse} from './projekt.model';
 import {ProjektAnlegenDialogComponent} from './projekt-anlegen-dialog.component';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable
+} from '@angular/material/table';
 
 @Component({
   selector: 'app-projektdetail',
@@ -23,12 +35,20 @@ import {ProjektAnlegenDialogComponent} from './projekt-anlegen-dialog.component'
     MatProgressSpinner,
     MatList,
     MatListItem,
-    MatListItemTitle,
     MatSelect,
     MatOption,
     MatButton,
-    MatListItemLine,
-    RouterLink
+    RouterLink,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatRowDef,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatHeaderRowDef
   ]
 })
 export class ProjektdetailComponent implements OnInit {
@@ -50,6 +70,7 @@ export class ProjektdetailComponent implements OnInit {
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
+  readonly aufgabenSpalten = ['titel', 'status', 'bearbeiten'];
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({
