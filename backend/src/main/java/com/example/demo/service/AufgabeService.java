@@ -59,6 +59,17 @@ public class AufgabeService {
         return buildResponse(aufgabeRepository.save(aufgabe));
     }
 
+    public AufgabeResponse aufgabeAktualisieren(UUID aufgabeId, AufgabeRequest request, Benutzer benutzer) {
+        Aufgabe aufgabe = aufgabeRepository.findById(aufgabeId)
+                .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
+
+        pruefeZugriff(aufgabe.getProjekt(), benutzer);
+
+        aufgabe.setTitel(request.getTitel());
+
+        return buildResponse(aufgabeRepository.save(aufgabe));
+    }
+
     private void pruefeZugriff(Projekt projekt, Benutzer benutzer) {
         boolean istMitglied = projekt.getMitarbeitende().stream()
                 .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));

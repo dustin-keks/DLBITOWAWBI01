@@ -32,6 +32,13 @@ public class AufgabeController {
         return ResponseEntity.ok(aufgabeService.aufgabeAnlegen(projektId, request, benutzer));
     }
 
+    @PutMapping("/{aufgabeId}")
+    public ResponseEntity<AufgabeResponse> aufgabeAktualisieren(@PathVariable UUID aufgabeId,
+                                                                @RequestBody AufgabeRequest request,
+                                                                @AuthenticationPrincipal Benutzer benutzer) {
+        return ResponseEntity.ok(aufgabeService.aufgabeAktualisieren(aufgabeId, request, benutzer));
+    }
+
     @PutMapping("/{aufgabeId}/status")
     public ResponseEntity<AufgabeResponse> statusAendern(@PathVariable UUID aufgabeId,
                                                          @RequestBody AufgabeStatusRequest request,
