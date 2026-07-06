@@ -27,4 +27,8 @@ export class ProjektService {
   mitarbeiterZuordnen(projektId: string, benutzerId: string): Observable<ProjektResponse> {
     return this.http.post<ProjektResponse>(`${this.apiUrl}/${projektId}/mitarbeiter/${benutzerId}`, {});
   }
+
+  projektAktualisieren(id: string, req: ProjektRequest): Observable<ProjektResponse> {
+    return this.http.put<ProjektResponse>(`${this.apiUrl}/${id}`, req);
+  }
 }

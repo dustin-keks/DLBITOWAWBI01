@@ -1,4 +1,4 @@
-<h1>Projektdetails "{{projektName()}}"</h1>
+<h1>Projektdetails "{{projekt()?.name}}"</h1>
 
 @if (loading()) {
   <mat-spinner></mat-spinner>
@@ -45,6 +45,12 @@
 @if (kannMitarbeiterZuordnen()) {
   <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
     Mitarbeiter zuordnen
+  </button>
+}
+
+@if (kannProjektBearbeiten()) {
+  <button matButton="filled" (click)="projektBearbeitenDialog()">
+    Projekt bearbeiten
   </button>
 }
 

@@ -62,7 +62,8 @@ export class ProjektlisteComponent implements OnInit {
 
   projektAnlegenDialog(): void {
     const dialog = this.dialog.open(ProjektAnlegenDialogComponent, {
-      width: '400px'
+      width: '400px',
+      data: null
     });
 
     dialog.afterClosed().subscribe((name: string | undefined) => {
@@ -93,6 +94,6 @@ export class ProjektlisteComponent implements OnInit {
   }
 
   projektAnzeigen(projekt: ProjektResponse):void {
-    this.router.navigate(['/projekte', projekt.id], {state: {projektName: projekt.name}});
+    this.router.navigate(['/projekte', projekt.id]);
   }
 }

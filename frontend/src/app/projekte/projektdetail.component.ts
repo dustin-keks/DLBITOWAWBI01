@@ -14,6 +14,7 @@ import {ProjektService} from './projekt.service';
 import {AuthService} from '../auth/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ProjektResponse} from './projekt.model';
+import {ProjektAnlegenDialogComponent} from './projekt-anlegen-dialog.component';
 
 @Component({
   selector: 'app-projektdetail',
@@ -38,9 +39,6 @@ export class ProjektdetailComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   readonly projektId = input.required<string>();
-  readonly projektName = signal(
-    (history.state as {projektName?: string}).projektName ?? 'Projektdetails'
-  );
   readonly aufgaben = signal<AufgabeResponse[]>([]);
   readonly loading = signal(true);
   readonly fehler = signal<string | null>(null);
@@ -49,6 +47,9 @@ export class ProjektdetailComponent implements OnInit {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
   readonly projekt = signal<ProjektResponse | null>(null);
+  readonly kannProjektBearbeiten = computed(() => {
+    return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
+  });
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({
@@ -111,6 +112,22 @@ export class ProjektdetailComponent implements OnInit {
             this.fehler.set('Der Mitarbeiter konnte keinem Projekt zugeordnet werden.');
           }
         })
+      }
+    });
+  }
+
+  projektBearbeitenDialog(): void {
+    const dialog = this.dialog.open(ProjektAnlegenDialogComponent, {
+      width: '400px',
+      data: this.projekt()
+    });
+
+    dialog.afterClosed().subscribe((name: string | undefined) => {
+      if (name) {
+        this.projektService.projektAktualisieren(this.projektId(), {name}).subscribe({
+          next: (res) => this.projekt.set(res),
+          error: () => this.fehler.set('Das Projekt konnte nicht aktualisiert werden.')
+        });
       }
     });
   }

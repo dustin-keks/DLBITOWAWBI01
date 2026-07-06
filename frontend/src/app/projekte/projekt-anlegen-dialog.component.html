@@ -1,4 +1,6 @@
-<h1 mat-dialog-title>Neues Projekt anlegen</h1>
+<h1 mat-dialog-title>
+  {{ projekt ? 'Projekt bearbeiten' : 'Neues Projekt anlegen' }}
+</h1>
 
 <mat-dialog-content>
   <form id="projektAnlegenForm" (submit)="speichern($event)">
@@ -16,6 +18,6 @@
 <mat-dialog-actions align="end">
   <button matButton (click)="abbrechen()">Abbrechen</button>
   <button matButton="filled" type="submit" form="projektAnlegenForm">
-    Neues Projekt anlegen
+    {{ projekt ? 'Projekt speichern' : 'Neues Projekt anlegen' }}
   </button>
 </mat-dialog-actions>
