@@ -42,6 +42,7 @@ public class AufgabeService {
 
         Aufgabe aufgabe = new Aufgabe();
         aufgabe.setTitel(request.getTitel());
+        aufgabe.setBeschreibung(request.getBeschreibung());
         aufgabe.setStatus(AufgabeStatus.OFFEN);
         aufgabe.setProjekt(projekt);
 
@@ -66,6 +67,7 @@ public class AufgabeService {
         pruefeZugriff(aufgabe.getProjekt(), benutzer);
 
         aufgabe.setTitel(request.getTitel());
+        aufgabe.setBeschreibung(request.getBeschreibung());
 
         return buildResponse(aufgabeRepository.save(aufgabe));
     }
@@ -82,6 +84,7 @@ public class AufgabeService {
         return new AufgabeResponse(
                 aufgabe.getId(),
                 aufgabe.getTitel(),
+                aufgabe.getBeschreibung(),
                 aufgabe.getStatus()
         );
     }

@@ -11,5 +11,6 @@ import java.util.UUID;
 public class AufgabeResponse {
     private UUID id;
     private String titel;
+    private String beschreibung;
     private AufgabeStatus status;
 }

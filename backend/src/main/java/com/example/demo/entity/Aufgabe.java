@@ -19,6 +19,8 @@ public class Aufgabe {
 
     private String titel;
 
+    private String beschreibung;
+
     @Enumerated(EnumType.STRING)
     private AufgabeStatus status;
 
