@@ -1,7 +1,7 @@
 import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {AufgabeService} from '../aufgaben/aufgabe.service';
 import {MatDialog} from '@angular/material/dialog';
-import {AufgabeResponse, AufgabeStatus} from '../aufgaben/aufgabe.model';
+import {AufgabeRequest, AufgabeResponse, AufgabeStatus} from '../aufgaben/aufgabe.model';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatList, MatListItem} from '@angular/material/list';
 import {MatOption, MatSelect} from '@angular/material/select';
@@ -70,7 +70,7 @@ export class ProjektdetailComponent implements OnInit {
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
-  readonly aufgabenSpalten = ['titel', 'status', 'bearbeiten'];
+  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'bearbeiten'];
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({
@@ -96,9 +96,9 @@ export class ProjektdetailComponent implements OnInit {
       data: null
     });
 
-    dialog.afterClosed().subscribe((titel: string | undefined) => {
-      if (titel) {
-        this.aufgabeService.aufgabeAnlegen(this.projektId(), {titel}).subscribe({
+    dialog.afterClosed().subscribe((request: AufgabeRequest | undefined) => {
+      if (request) {
+        this.aufgabeService.aufgabeAnlegen(this.projektId(), request).subscribe({
           next: (neueAufgabe) => {
             this.aufgaben.update((liste) => [...liste, neueAufgabe]);
           },
@@ -116,9 +116,9 @@ export class ProjektdetailComponent implements OnInit {
       data: aufgabe
     });
 
-    dialog.afterClosed().subscribe((titel: string | undefined) => {
-      if (titel) {
-        this.aufgabeService.aufgabeAktualisieren(this.projektId(), aufgabe.id, {titel}).subscribe({
+    dialog.afterClosed().subscribe((request: AufgabeRequest | undefined) => {
+      if (request) {
+        this.aufgabeService.aufgabeAktualisieren(this.projektId(), aufgabe.id, request).subscribe({
           next: (aktualisierteAufgabe) => {
             this.aufgaben.update((liste) =>
               liste.map((eintrag) => (eintrag.id === aktualisierteAufgabe.id ? aktualisierteAufgabe : eintrag))
@@ -126,7 +126,7 @@ export class ProjektdetailComponent implements OnInit {
           }, error: () => {
             this.fehler.set('Die Aufgabe konnte nicht aktualisiert werden.');
           }
-        })
+        });
       }
     });
   }

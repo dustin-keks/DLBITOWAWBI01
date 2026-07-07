@@ -13,6 +13,7 @@ import {AufgabeResponse} from './aufgabe.model';
 
 interface AufgabeAnlegenModel {
   titel: string;
+  beschreibung: string;
 }
 
 @Component({
@@ -34,7 +35,10 @@ export class AufgabeAnlegenDialogComponent {
   private dialog = inject(MatDialogRef<AufgabeAnlegenDialogComponent>);
   readonly aufgabe = inject<AufgabeResponse | null>(MAT_DIALOG_DATA);
 
-  readonly model = signal<AufgabeAnlegenModel>({titel: this.aufgabe?.titel ?? ''});
+  readonly model = signal<AufgabeAnlegenModel>({
+    titel: this.aufgabe?.titel ?? '',
+    beschreibung: this.aufgabe?.beschreibung ?? ''
+  });
   readonly aufgabeForm = form(this.model, (schemaPath) => {
     required(schemaPath.titel, {message: 'Der Titel ist erforderlich.'});
   });
@@ -46,7 +50,7 @@ export class AufgabeAnlegenDialogComponent {
   speichern(event: Event):void {
     event.preventDefault();
     if (this.aufgabeForm.titel().valid()) {
-      this.dialog.close(this.model().titel);
+      this.dialog.close(this.model());
     }
   }
 }

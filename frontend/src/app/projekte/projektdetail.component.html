@@ -13,6 +13,11 @@
       <mat-cell *matCellDef="let aufgabe">{{aufgabe.titel}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="beschreibung">
+      <mat-header-cell *matHeaderCellDef>Beschreibung</mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">{{aufgabe.beschreibung}}</mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
       <mat-cell *matCellDef="let aufgabe">

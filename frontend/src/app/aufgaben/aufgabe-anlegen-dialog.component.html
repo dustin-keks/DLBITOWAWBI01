@@ -12,6 +12,11 @@
         <mat-error>{{aufgabeForm.titel().errors()[0].message}}</mat-error>
       }
     </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-label>Beschreibung</mat-label>
+      <textarea matInput [formField]="aufgabeForm.beschreibung" rows="3"></textarea>
+    </mat-form-field>
   </form>
 </mat-dialog-content>
 
