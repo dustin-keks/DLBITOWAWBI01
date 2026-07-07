@@ -19,6 +19,7 @@ public class Aufgabe {
 
     private String titel;
 
+    @Column(columnDefinition = "TEXT")
     private String beschreibung;
 
     @Enumerated(EnumType.STRING)
