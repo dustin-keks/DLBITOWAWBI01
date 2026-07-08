@@ -23,4 +23,8 @@ export class AufgabeService {
   statusAendern(projektId: string, aufgabeId: string, status: AufgabeStatus):Observable<AufgabeResponse> {
     return this.http.put<AufgabeResponse>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}/status`, {status});
   }
+
+  aufgabeLoeschen(projektId: string, aufgabeId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}`);
+  }
 }

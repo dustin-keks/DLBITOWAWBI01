@@ -39,6 +39,13 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="loeschen">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">
+        <button matButton type="button" (click)="aufgabeLoeschen(aufgabe)">Aufgabe löschen</button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="aufgabenSpalten"></mat-header-row>
     <mat-row *matRowDef="let row; columns: aufgabenSpalten"></mat-row>
   </mat-table>

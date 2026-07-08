@@ -70,7 +70,7 @@ export class ProjektdetailComponent implements OnInit {
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
-  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'bearbeiten'];
+  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'bearbeiten', 'loeschen'];
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({
@@ -173,6 +173,21 @@ export class ProjektdetailComponent implements OnInit {
           next: (res) => this.projekt.set(res),
           error: () => this.fehler.set('Das Projekt konnte nicht aktualisiert werden.')
         });
+      }
+    });
+  }
+
+  aufgabeLoeschen(aufgabe: AufgabeResponse): void {
+    if (!confirm(`Soll die Aufgabe "${aufgabe.titel}" wirklich gelöscht werden?`)) {
+      return;
+    }
+
+    this.aufgabeService.aufgabeLoeschen(this.projektId(), aufgabe.id).subscribe({
+      next: () => {
+        this.aufgaben.update((liste) => liste.filter((eintrag) => eintrag.id !== aufgabe.id));
+      },
+      error: () => {
+        this.fehler.set('Die Aufgabe konnte nicht gelöscht werden.');
       }
     });
   }
