@@ -42,36 +42,36 @@
     <mat-header-row *matHeaderRowDef="aufgabenSpalten"></mat-header-row>
     <mat-row *matRowDef="let row; columns: aufgabenSpalten"></mat-row>
   </mat-table>
+}
 
-  <div class="row">
-    <div class="col-auto">
-      <button matButton="filled" (click)="aufgabeAnlegenDialog()">
-        Neue Aufgabe anlegen
-      </button>
-    </div>
-    <div class="col-auto">
-      @if (kannProjektBearbeiten()) {
-        <button matButton="filled" (click)="projektBearbeitenDialog()">
-          Projekt bearbeiten
-        </button>
-      }
-    </div>
+<div class="row">
+  <div class="col-auto">
+    <button matButton="filled" (click)="aufgabeAnlegenDialog()">
+      Neue Aufgabe anlegen
+    </button>
   </div>
-
-  @if (projekt()?.mitarbeitende?.length) {
-    <h2 class="mt-5">Mitarbeitende in diesem Projekt</h2>
-
-    <mat-list>
-      @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
-        <mat-list-item>{{mitarbeiter.name}}</mat-list-item>
-      }
-    </mat-list>
-
-    @if (kannMitarbeiterZuordnen()) {
-      <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
-        Mitarbeiter zuordnen
+  @if (kannProjektBearbeiten()) {
+    <div class="col-auto">
+      <button matButton="filled" (click)="projektBearbeitenDialog()">
+        Projekt bearbeiten
       </button>
+    </div>
+  }
+</div>
+
+@if (projekt()?.mitarbeitende?.length) {
+  <h2 class="mt-5">Mitarbeitende in diesem Projekt</h2>
+
+  <mat-list>
+    @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
+      <mat-list-item>{{mitarbeiter.name}}</mat-list-item>
     }
+  </mat-list>
+
+  @if (kannMitarbeiterZuordnen()) {
+    <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
+      Mitarbeiter zuordnen
+    </button>
   }
 }
 
