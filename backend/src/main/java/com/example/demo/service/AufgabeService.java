@@ -72,6 +72,15 @@ public class AufgabeService {
         return buildResponse(aufgabeRepository.save(aufgabe));
     }
 
+    public void aufgabeLoeschen(UUID aufgabeId, Benutzer benutzer) {
+        Aufgabe aufgabe = aufgabeRepository.findById(aufgabeId)
+                .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
+
+        pruefeZugriff(aufgabe.getProjekt(), benutzer);
+
+        aufgabeRepository.delete(aufgabe);
+    }
+
     private void pruefeZugriff(Projekt projekt, Benutzer benutzer) {
         boolean istMitglied = projekt.getMitarbeitende().stream()
                 .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));

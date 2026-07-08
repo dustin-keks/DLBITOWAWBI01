@@ -39,6 +39,13 @@ public class AufgabeController {
         return ResponseEntity.ok(aufgabeService.aufgabeAktualisieren(aufgabeId, request, benutzer));
     }
 
+    @DeleteMapping("/{aufgabeId}")
+    public ResponseEntity<Void> aufgabeLoeschen(@PathVariable UUID aufgabeId,
+                                                @AuthenticationPrincipal Benutzer benutzer) {
+        aufgabeService.aufgabeLoeschen(aufgabeId, benutzer);
+        return ResponseEntity.noContent().build();
+    }
+
     @PutMapping("/{aufgabeId}/status")
     public ResponseEntity<AufgabeResponse> statusAendern(@PathVariable UUID aufgabeId,
                                                          @RequestBody AufgabeStatusRequest request,
