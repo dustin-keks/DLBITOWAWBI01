@@ -84,15 +84,20 @@
 @if (projekt()?.mitarbeitende?.length) {
   <h2 class="mt-5">Mitarbeitende in diesem Projekt</h2>
 
-  <mat-list>
+  <mat-chip-set>
     @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
-      <mat-list-item>{{mitarbeiter.name}}</mat-list-item>
+      <mat-chip [removable]="kannMitarbeiterZuordnen()" (removed)="mitarbeiterEntfernen(mitarbeiter)">
+        {{ mitarbeiter.name }}
+        @if (kannMitarbeiterZuordnen()) {
+          <mat-icon matChipRemove>cancel</mat-icon>
+        }
+      </mat-chip>
     }
-  </mat-list>
+  </mat-chip-set>
 
   @if (kannMitarbeiterZuordnen()) {
     <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
-      Mitarbeiter zuordnen
+      Neuen Mitarbeiter diesem Projekt zuordnen
     </button>
   }
 }

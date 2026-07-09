@@ -3,7 +3,6 @@ import {AufgabeService} from '../aufgaben/aufgabe.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AufgabeRequest, AufgabeResponse, AufgabeStatus} from '../aufgaben/aufgabe.model';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {MatList, MatListItem} from '@angular/material/list';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {AufgabeAnlegenDialogComponent} from '../aufgaben/aufgabe-anlegen-dialog.component';
 import {MatButton} from '@angular/material/button';
@@ -27,14 +26,14 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
+import {MatChip, MatChipRemove, MatChipSet} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-projektdetail',
   templateUrl: './projektdetail.component.html',
   imports: [
     MatProgressSpinner,
-    MatList,
-    MatListItem,
     MatSelect,
     MatOption,
     MatButton,
@@ -48,7 +47,11 @@ import {
     MatRowDef,
     MatCellDef,
     MatHeaderCellDef,
-    MatHeaderRowDef
+    MatHeaderRowDef,
+    MatChipSet,
+    MatChip,
+    MatIcon,
+    MatChipRemove
   ]
 })
 export class ProjektdetailComponent implements OnInit {
@@ -201,6 +204,13 @@ export class ProjektdetailComponent implements OnInit {
       }, error: () => {
         this.fehler.set('Der Benutzer konnte der Aufgabe nicht zugewiesen werden.')
       }
+    });
+  }
+
+  mitarbeiterEntfernen(mitarbeiter: BenutzerResponse): void {
+    this.projektService.mitarbeiterEntfernen(this.projektId(), mitarbeiter.id).subscribe({
+      next: (res) => this.projekt.set(res),
+      error: () => this.fehler.set('Der Mitarbeiter konnte nicht aus dem Projekt entfernt werden.')
     });
   }
 }
