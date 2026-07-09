@@ -58,4 +58,11 @@ public class ProjektController {
                                                                @PathVariable UUID benutzerId) {
         return ResponseEntity.ok(projektService.mitarbeiterZuordnen(projektId, benutzerId));
     }
+
+    @DeleteMapping("/{projektId}/mitarbeiter/{benutzerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
+    public ResponseEntity<ProjektResponse> mitarbeiterEntfernen(@PathVariable UUID projektId,
+                                                                @PathVariable UUID benutzerId) {
+        return ResponseEntity.ok(projektService.mitarbeiterEntfernen(projektId, benutzerId));
+    }
 }

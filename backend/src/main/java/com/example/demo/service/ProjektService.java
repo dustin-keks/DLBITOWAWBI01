@@ -93,6 +93,21 @@ public class ProjektService {
         return buildResponse(projekt);
     }
 
+    public ProjektResponse mitarbeiterEntfernen(UUID projektId, UUID benutzerId) {
+        Projekt projekt = projektRepository.findById(projektId)
+                .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
+        Benutzer benutzer = benutzerRepository.findById(benutzerId)
+                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
+
+        projekt.getMitarbeitende().removeIf(mitglied -> mitglied.getId().equals(benutzerId));
+        benutzer.getProjekte().removeIf(zugewiesenesProjekt -> zugewiesenesProjekt.getId().equals(projektId));
+
+        projektRepository.save(projekt);
+        benutzerRepository.save(benutzer);
+
+        return buildResponse(projekt);
+    }
+
     private ProjektResponse buildResponse(Projekt projekt) {
         long alleAufgaben = projekt.getAufgaben().size();
         long erledigteAufgaben = projekt.getAufgaben().stream()
