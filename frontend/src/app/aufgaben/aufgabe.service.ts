@@ -27,4 +27,8 @@ export class AufgabeService {
   aufgabeLoeschen(projektId: string, aufgabeId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}`);
   }
+
+  aufgabeZuweisen(projektId: string, aufgabeId: string, benutzerId: string | null): Observable<AufgabeResponse> {
+    return this.http.put<AufgabeResponse>(`${this.apiUrl}/${projektId}/aufgaben/${aufgabeId}/zuweisung`, {benutzerId});
+  }
 }

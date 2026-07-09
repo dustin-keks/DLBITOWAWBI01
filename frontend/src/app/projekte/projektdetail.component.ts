@@ -70,7 +70,7 @@ export class ProjektdetailComponent implements OnInit {
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
-  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'bearbeiten', 'loeschen'];
+  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'zugewiesenerBenutzer', 'bearbeiten', 'loeschen'];
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({
@@ -188,6 +188,18 @@ export class ProjektdetailComponent implements OnInit {
       },
       error: () => {
         this.fehler.set('Die Aufgabe konnte nicht gelöscht werden.');
+      }
+    });
+  }
+
+  aufgabeZuweisen(aufgabe: AufgabeResponse, benutzerId: string | null): void {
+    this.aufgabeService.aufgabeZuweisen(this.projektId(), aufgabe.id, benutzerId).subscribe({
+      next: (aktualisierteAufgabe) => {
+        this.aufgaben.update((liste) =>
+          liste.map((eintrag) => (eintrag.id === aktualisierteAufgabe.id ? aktualisierteAufgabe : eintrag))
+        );
+      }, error: () => {
+        this.fehler.set('Der Benutzer konnte der Aufgabe nicht zugewiesen werden.')
       }
     });
   }

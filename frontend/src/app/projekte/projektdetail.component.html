@@ -32,6 +32,21 @@
       </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="zugewiesenerBenutzer">
+      <mat-header-cell *matHeaderCellDef>Zugewiesen an</mat-header-cell>
+      <mat-cell *matCellDef="let aufgabe">
+        <mat-select
+          [value]="aufgabe.zugewiesenerBenutzer?.id ?? null"
+          (selectionChange)="aufgabeZuweisen(aufgabe, $event.value)"
+        >
+          <mat-option [value]="null">Nicht zugewiesen</mat-option>
+          @for (mitarbeiter of projekt()?.mitarbeitende; track mitarbeiter.id) {
+            <mat-option [value]="mitarbeiter.id">{{mitarbeiter.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="bearbeiten">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let aufgabe">
