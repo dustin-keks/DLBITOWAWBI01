@@ -148,7 +148,10 @@ export class ProjektdetailComponent implements OnInit {
   }
 
   mitarbeiterZuordnenDialog():void {
-    const dialog = this.dialog.open(MitarbeiterZuordnenDialogComponent, {width: '400px'});
+    const dialog = this.dialog.open(MitarbeiterZuordnenDialogComponent, {
+      width: '400px',
+      data: this.projekt()?.mitarbeitende ?? []
+    });
     dialog.afterClosed().subscribe((ausgewaehlt: BenutzerResponse | undefined) => {
       if (ausgewaehlt) {
         this.projektService.mitarbeiterZuordnen(this.projektId(), ausgewaehlt.id).subscribe({

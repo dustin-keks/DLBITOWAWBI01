@@ -1,5 +1,11 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from '@angular/material/dialog';
 import {BenutzerService} from '../benutzer/benutzer.service';
 import {BenutzerResponse} from '../benutzer/benutzer.model';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -25,6 +31,7 @@ import {MatButton} from '@angular/material/button';
 export class MitarbeiterZuordnenDialogComponent implements OnInit {
   private dialog = inject(MatDialogRef<MitarbeiterZuordnenDialogComponent>);
   private benutzerService = inject(BenutzerService);
+  readonly bereitsZugeordneteMitarbeiter = inject<BenutzerResponse[]>(MAT_DIALOG_DATA)
 
   readonly benutzer = signal<BenutzerResponse[]>([]);
   readonly loading = signal(true);
@@ -34,7 +41,8 @@ export class MitarbeiterZuordnenDialogComponent implements OnInit {
   ngOnInit(): void {
     this.benutzerService.getAlleBenutzer().subscribe({
       next: (res) => {
-        this.benutzer.set(res);
+        const zugeordneteMitarbeiterIds = new Set(this.bereitsZugeordneteMitarbeiter.map((mitarbeiter) => mitarbeiter.id))
+        this.benutzer.set(res.filter((eintrag) => !zugeordneteMitarbeiterIds.has(eintrag.id)));
         this.loading.set(false);
       },
       error: () => {
