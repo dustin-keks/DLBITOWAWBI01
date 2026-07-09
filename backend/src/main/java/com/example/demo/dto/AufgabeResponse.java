@@ -13,4 +13,5 @@ public class AufgabeResponse {
     private String titel;
     private String beschreibung;
     private AufgabeStatus status;
+    private BenutzerResponse zugewiesenerBenutzer;
 }

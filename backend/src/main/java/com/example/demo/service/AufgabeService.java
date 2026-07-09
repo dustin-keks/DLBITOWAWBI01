@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.dto.AufgabeRequest;
 import com.example.demo.dto.AufgabeResponse;
 import com.example.demo.dto.AufgabeStatusRequest;
+import com.example.demo.dto.BenutzerResponse;
 import com.example.demo.entity.Aufgabe;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.entity.Projekt;
@@ -81,6 +82,26 @@ public class AufgabeService {
         aufgabeRepository.delete(aufgabe);
     }
 
+    public AufgabeResponse aufgabeZuweisen(UUID aufgabeId, UUID benutzerId, Benutzer benutzer) {
+        Aufgabe aufgabe = aufgabeRepository.findById(aufgabeId)
+                .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
+
+        pruefeZugriff(aufgabe.getProjekt(), benutzer);
+
+        if (benutzerId == null) {
+            aufgabe.setZugewiesenerBenutzer(null);
+        } else {
+            Benutzer neuerBenutzer = aufgabe.getProjekt().getMitarbeitende().stream()
+                    .filter(mitglied -> mitglied.getId().equals(benutzerId))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException("Der Benutzer ist kein Mitglied dieses Projekts."));
+
+            aufgabe.setZugewiesenerBenutzer(neuerBenutzer);
+        }
+
+        return buildResponse(aufgabeRepository.save(aufgabe));
+    }
+
     private void pruefeZugriff(Projekt projekt, Benutzer benutzer) {
         boolean istMitglied = projekt.getMitarbeitende().stream()
                 .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));
@@ -90,11 +111,19 @@ public class AufgabeService {
     }
 
     private AufgabeResponse buildResponse(Aufgabe aufgabe) {
+        BenutzerResponse zugewiesenerBenutzer = aufgabe.getZugewiesenerBenutzer() == null ? null : new BenutzerResponse(
+                aufgabe.getZugewiesenerBenutzer().getId(),
+                aufgabe.getZugewiesenerBenutzer().getName(),
+                aufgabe.getZugewiesenerBenutzer().getEmail(),
+                aufgabe.getZugewiesenerBenutzer().getRolle()
+        );
+
         return new AufgabeResponse(
                 aufgabe.getId(),
                 aufgabe.getTitel(),
                 aufgabe.getBeschreibung(),
-                aufgabe.getStatus()
+                aufgabe.getStatus(),
+                zugewiesenerBenutzer
         );
     }
 }

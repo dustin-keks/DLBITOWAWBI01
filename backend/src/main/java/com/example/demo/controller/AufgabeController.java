@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.AufgabeRequest;
 import com.example.demo.dto.AufgabeResponse;
 import com.example.demo.dto.AufgabeStatusRequest;
+import com.example.demo.dto.AufgabeZuweisenRequest;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.service.AufgabeService;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,12 @@ public class AufgabeController {
                                                          @RequestBody AufgabeStatusRequest request,
                                                          @AuthenticationPrincipal Benutzer benutzer) {
         return ResponseEntity.ok(aufgabeService.statusAendern(aufgabeId, request, benutzer));
+    }
+
+    @PutMapping("/{aufgabeId}/zuweisung")
+    public ResponseEntity<AufgabeResponse> aufgabeZuweisen(@PathVariable UUID aufgabeId,
+                                                           @RequestBody AufgabeZuweisenRequest request,
+                                                           @AuthenticationPrincipal Benutzer benutzer) {
+        return ResponseEntity.ok(aufgabeService.aufgabeZuweisen(aufgabeId, request.getBenutzerId(), benutzer));
     }
 }

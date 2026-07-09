@@ -28,4 +28,8 @@ public class Aufgabe {
     @ManyToOne
     @JoinColumn(name = "projekt_id")
     private Projekt projekt;
+
+    @ManyToOne
+    @JoinColumn(name = "zugewiesener_benutzer")
+    private Benutzer zugewiesenerBenutzer;
 }
