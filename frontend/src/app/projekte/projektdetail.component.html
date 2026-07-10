@@ -23,6 +23,7 @@
       <mat-cell *matCellDef="let aufgabe">
         <mat-select
           [value]="aufgabe.status"
+          [disabled]="istProjektArchiviert()"
           (selectionChange)="statusAendern(aufgabe, $event.value)"
         >
           @for (option of statusOptionen; track option) {
@@ -37,6 +38,7 @@
       <mat-cell *matCellDef="let aufgabe">
         <mat-select
           [value]="aufgabe.zugewiesenerBenutzer?.id ?? ''"
+          [disabled]="istProjektArchiviert()"
           (selectionChange)="aufgabeZuweisen(aufgabe, $event.value || null)"
         >
           <mat-option [value]="''">Nicht zugewiesen</mat-option>
@@ -50,14 +52,23 @@
     <ng-container matColumnDef="bearbeiten">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let aufgabe">
-        <button matButton type="button" (click)="aufgabeBearbeitenDialog(aufgabe)">Aufgabe bearbeiten</button>
+        <button matButton type="button"
+                [disabled]="istProjektArchiviert()"
+                (click)="aufgabeBearbeitenDialog(aufgabe)"
+        >
+          Aufgabe bearbeiten
+        </button>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="loeschen">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let aufgabe">
-        <button matButton type="button" (click)="aufgabeLoeschen(aufgabe)">Aufgabe löschen</button>
+        <button matButton type="button"
+                [disabled]="istProjektArchiviert()"
+                (click)="aufgabeLoeschen(aufgabe)">
+          Aufgabe löschen
+        </button>
       </mat-cell>
     </ng-container>
 
@@ -68,13 +79,20 @@
 
 <div class="row">
   <div class="col-auto">
-    <button matButton="filled" (click)="aufgabeAnlegenDialog()">
+    <button matButton="filled"
+            [disabled]="istProjektArchiviert()"
+            (click)="aufgabeAnlegenDialog()"
+    >
       Neue Aufgabe anlegen
     </button>
   </div>
+
   @if (kannProjektBearbeiten()) {
     <div class="col-auto">
-      <button matButton="filled" (click)="projektBearbeitenDialog()">
+      <button matButton="filled"
+              [disabled]="istProjektArchiviert()"
+              (click)="projektBearbeitenDialog()"
+      >
         Projekt bearbeiten
       </button>
     </div>
@@ -86,7 +104,11 @@
 
   <mat-chip-set>
     @for (mitarbeiter of projekt()!.mitarbeitende; track mitarbeiter.id) {
-      <mat-chip [removable]="kannMitarbeiterZuordnen()" (removed)="mitarbeiterEntfernen(mitarbeiter)">
+      <mat-chip
+        [disabled]="istProjektArchiviert()"
+        [removable]="kannMitarbeiterZuordnen()"
+        (removed)="mitarbeiterEntfernen(mitarbeiter)"
+      >
         {{ mitarbeiter.name }}
         @if (kannMitarbeiterZuordnen()) {
           <mat-icon matChipRemove>cancel</mat-icon>
@@ -96,7 +118,10 @@
   </mat-chip-set>
 
   @if (kannMitarbeiterZuordnen()) {
-    <button matButton="filled" (click)="mitarbeiterZuordnenDialog()">
+    <button matButton="filled"
+            [disabled]="istProjektArchiviert()"
+            (click)="mitarbeiterZuordnenDialog()"
+    >
       Neuen Mitarbeiter diesem Projekt zuordnen
     </button>
   }

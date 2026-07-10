@@ -11,8 +11,56 @@
     Du bist noch keinem Projekt zugeordnet.
   </p>
 } @else {
+  @if (aktiveProjekte().length === 0) {
+    <p class="text-danger">
+      Es sind keine aktiven Projekte vorhanden
+    </p>
+  } @else {
+    <h2 class="mt-5">Aktive Projekte</h2>
+
+    <div class="row">
+      @for (projekt of aktiveProjekte(); track projekt.id) {
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{ projekt.name }}</mat-card-title>
+              <mat-card-subtitle>{{ projekt.status }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <p>Fortschritt: {{ projekt.fortschritt.toFixed(2) }}</p>
+              <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <button matButton (click)="projektAnzeigen(projekt)">
+                Projekt anzeigen
+              </button>
+
+              @if (kannProjektArchivieren()) {
+                <button matButton (click)="statusAendern(projekt, 'ARCHIVIERT')">
+                  Projekt archivieren
+                </button>
+              }
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      }
+    </div>
+  }
+}
+
+@if (kannProjektAnlegen()) {
+  <button matButton="filled" (click)="projektAnlegenDialog()" class="mt-3">
+    Neues Projekt anlegen
+  </button>
+}
+
+@if (archivierteProjekte().length > 0) {
+  <h2 class="mt-5">Archivierte Projekte</h2>
+
   <div class="row">
-    @for (projekt of projekte(); track projekt.id) {
+    @for (projekt of archivierteProjekte(); track projekt.id) {
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
         <mat-card>
           <mat-card-header>
@@ -25,29 +73,19 @@
             <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
           </mat-card-content>
 
-          <mat-card-footer>
+          <mat-card-actions>
             <button matButton (click)="projektAnzeigen(projekt)">
               Projekt anzeigen
             </button>
-          </mat-card-footer>
 
-          @if (kannProjektAnlegen()) {
-            <mat-card-actions>
-              @if (projekt.status === 'AKTIV') {
-                <button matButton (click)="statusAendern(projekt, 'ARCHIVIERT')">
-                  Projekt archivieren
-                </button>
-              }
-            </mat-card-actions>
-          }
+            @if (kannProjektReaktivieren()) {
+              <button matButton (click)="statusAendern(projekt, 'AKTIV')">
+                Projekt reaktivieren
+              </button>
+            }
+          </mat-card-actions>
         </mat-card>
       </div>
     }
   </div>
-}
-
-@if (kannProjektAnlegen()) {
-  <button matButton="filled" (click)="projektAnlegenDialog()">
-    Neues Projekt anlegen
-  </button>
 }

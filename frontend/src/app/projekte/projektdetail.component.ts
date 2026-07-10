@@ -62,18 +62,24 @@ export class ProjektdetailComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   readonly projektId = input.required<string>();
+
+  readonly statusOptionen: AufgabeStatus[] = ['OFFEN', 'IN_BEARBEITUNG', 'ERLEDIGT'];
+  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'zugewiesenerBenutzer', 'bearbeiten', 'loeschen'];
+
   readonly aufgaben = signal<AufgabeResponse[]>([]);
   readonly loading = signal(true);
   readonly fehler = signal<string | null>(null);
-  readonly statusOptionen: AufgabeStatus[] = ['OFFEN', 'IN_BEARBEITUNG', 'ERLEDIGT'];
+  readonly projekt = signal<ProjektResponse | null>(null);
+
   readonly kannMitarbeiterZuordnen = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
-  readonly projekt = signal<ProjektResponse | null>(null);
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
-  readonly aufgabenSpalten = ['titel', 'beschreibung', 'status', 'zugewiesenerBenutzer', 'bearbeiten', 'loeschen'];
+  readonly istProjektArchiviert = computed(() => {
+    return this.projekt()?.status === 'ARCHIVIERT'
+  });
 
   ngOnInit(): void {
     this.aufgabeService.getAufgaben(this.projektId()).subscribe({

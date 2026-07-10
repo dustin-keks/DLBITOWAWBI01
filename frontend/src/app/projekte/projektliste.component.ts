@@ -5,7 +5,6 @@ import {
   MatCard,
   MatCardActions,
   MatCardContent,
-  MatCardFooter,
   MatCardHeader,
   MatCardSubtitle,
   MatCardTitle
@@ -30,8 +29,7 @@ import {Router} from '@angular/router';
     MatProgressBar,
     MatProgressSpinner,
     MatButton,
-    MatCardActions,
-    MatCardFooter
+    MatCardActions
   ]
 })
 export class ProjektlisteComponent implements OnInit {
@@ -45,6 +43,14 @@ export class ProjektlisteComponent implements OnInit {
   readonly fehler = signal<string | null>(null);
   readonly kannProjektAnlegen = computed(() =>
     this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
+  );
+  readonly kannProjektArchivieren = this.kannProjektAnlegen;
+  readonly kannProjektReaktivieren = this.kannProjektAnlegen;
+  readonly aktiveProjekte = computed(() =>
+    this.projekte().filter((projekt) => projekt.status === 'AKTIV')
+  );
+  readonly archivierteProjekte = computed(() =>
+    this.projekte().filter((projekt) => projekt.status === 'ARCHIVIERT')
   );
 
   ngOnInit(): void {
