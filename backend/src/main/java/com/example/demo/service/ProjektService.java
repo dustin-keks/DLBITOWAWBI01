@@ -7,6 +7,7 @@ import com.example.demo.entity.Benutzer;
 import com.example.demo.entity.Projekt;
 import com.example.demo.entity.enums.AufgabeStatus;
 import com.example.demo.entity.enums.ProjektStatus;
+import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.BenutzerRepository;
 import com.example.demo.repository.ProjektRepository;
@@ -62,6 +63,8 @@ public class ProjektService {
         Benutzer benutzer = benutzerRepository.findById(benutzerId)
                 .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
 
+        pruefeRechteZumBearbeiten(projekt);
+
         projekt.getMitarbeitende().add(benutzer);
         benutzer.getProjekte().add(projekt);
 
@@ -74,6 +77,8 @@ public class ProjektService {
     public ProjektResponse projektAktualisieren(UUID projektId, ProjektRequest request) {
         Projekt projekt = projektRepository.findById(projektId)
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
+
+        pruefeRechteZumBearbeiten(projekt);
 
         projekt.setName(request.getName());
         return buildResponse(projektRepository.save(projekt));
@@ -98,6 +103,8 @@ public class ProjektService {
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
         Benutzer benutzer = benutzerRepository.findById(benutzerId)
                 .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
+
+        pruefeRechteZumBearbeiten(projekt);
 
         projekt.getMitarbeitende().removeIf(mitglied -> mitglied.getId().equals(benutzerId));
         benutzer.getProjekte().removeIf(zugewiesenesProjekt -> zugewiesenesProjekt.getId().equals(projektId));
@@ -126,5 +133,11 @@ public class ProjektService {
                 fortschritt,
                 mitarbeitende
         );
+    }
+
+    private void pruefeRechteZumBearbeiten(Projekt projekt) {
+        if (projekt.getStatus() == ProjektStatus.ARCHIVIERT) {
+            throw new ConflictException("Ein archiviertes Projekt kann nicht bearbeitet werden.");
+        }
     }
 }

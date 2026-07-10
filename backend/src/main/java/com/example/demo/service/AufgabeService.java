@@ -8,6 +8,8 @@ import com.example.demo.entity.Aufgabe;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.entity.Projekt;
 import com.example.demo.entity.enums.AufgabeStatus;
+import com.example.demo.entity.enums.ProjektStatus;
+import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.AufgabeRepository;
 import com.example.demo.repository.ProjektRepository;
@@ -40,6 +42,7 @@ public class AufgabeService {
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
 
         pruefeZugriff(projekt, benutzer);
+        pruefeRechteZumBearbeiten(projekt);
 
         Aufgabe aufgabe = new Aufgabe();
         aufgabe.setTitel(request.getTitel());
@@ -55,6 +58,7 @@ public class AufgabeService {
                 .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
 
         pruefeZugriff(aufgabe.getProjekt(), benutzer);
+        pruefeRechteZumBearbeiten(aufgabe.getProjekt());
 
         aufgabe.setStatus(request.getStatus());
 
@@ -66,6 +70,7 @@ public class AufgabeService {
                 .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
 
         pruefeZugriff(aufgabe.getProjekt(), benutzer);
+        pruefeRechteZumBearbeiten(aufgabe.getProjekt());
 
         aufgabe.setTitel(request.getTitel());
         aufgabe.setBeschreibung(request.getBeschreibung());
@@ -78,6 +83,7 @@ public class AufgabeService {
                 .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
 
         pruefeZugriff(aufgabe.getProjekt(), benutzer);
+        pruefeRechteZumBearbeiten(aufgabe.getProjekt());
 
         aufgabeRepository.delete(aufgabe);
     }
@@ -87,6 +93,7 @@ public class AufgabeService {
                 .orElseThrow(() -> new NotFoundException("Aufgabe nicht gefunden"));
 
         pruefeZugriff(aufgabe.getProjekt(), benutzer);
+        pruefeRechteZumBearbeiten(aufgabe.getProjekt());
 
         if (benutzerId == null) {
             aufgabe.setZugewiesenerBenutzer(null);
@@ -107,6 +114,12 @@ public class AufgabeService {
                 .anyMatch(mitglied -> mitglied.getId().equals(benutzer.getId()));
         if (!istMitglied) {
             throw new AccessDeniedException("Du hast keinen Zugriff auf dieses Projekt.");
+        }
+    }
+
+    private void pruefeRechteZumBearbeiten(Projekt projekt) {
+        if (projekt.getStatus() == ProjektStatus.ARCHIVIERT) {
+            throw new ConflictException("Aufgaben in einem archivierten Projekt dürfen nicht mehr bearbeitet werden.");
         }
     }
 
