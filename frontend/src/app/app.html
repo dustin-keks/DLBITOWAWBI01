@@ -1,8 +1,10 @@
 <header>
-  <div class="container border-bottom">
-    <mat-toolbar class="row justify-content-between">
+  <div class="container">
+    <mat-toolbar class="row">
       <div class="col">
-        Dira
+        <a routerLink="/">
+          <img src="/dira-logo.svg" alt="Logo von Dira">
+        </a>
       </div>
 
       @if (isAngemeldet()) {
@@ -25,7 +27,7 @@
 </header>
 
 <main>
-  <div class="container">
+  <div class="container border-top mt-2">
     <router-outlet></router-outlet>
   </div>
 </main>
