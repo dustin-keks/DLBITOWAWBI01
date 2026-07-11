@@ -23,6 +23,7 @@ public class CucumberHooks {
     @Before
     public void before() {
         aufgabeRepository.deleteAll();
+        benutzerRepository.projektZuordnungLoeschen();
         projektRepository.deleteAll();
         benutzerRepository.deleteAll();
         mandantRepository.deleteAll();

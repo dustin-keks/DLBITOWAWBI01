@@ -50,6 +50,7 @@ public class AufgabeSteps {
     private String passwort;
     private UUID projektId;
     private UUID aufgabeId;
+    private Benutzer benutzer;
 
     @Angenommen("ein Mitarbeitender mit der Email {string} und dem Passwort {string}")
     public void einMitarbeitender(String email, String passwort) {
@@ -60,7 +61,7 @@ public class AufgabeSteps {
         mandant.setName("Test GmbH");
         mandantRepository.save(mandant);
 
-        Benutzer benutzer = new Benutzer();
+        benutzer = new Benutzer();
         benutzer.setName("Test Mitarbeiter");
         benutzer.setEmail(email);
         benutzer.setPasswort(passwordEncoder.encode(passwort));
@@ -71,13 +72,15 @@ public class AufgabeSteps {
 
     @Angenommen("eine Aufgabe {string} mit dem Status {string}")
     public void eineAufgabe(String titel, String status) {
-        Benutzer benutzer = benutzerRepository.findByEmail(email).orElseThrow();
-
         Projekt projekt = new Projekt();
         projekt.setName("Testprojekt");
         projekt.setStatus(ProjektStatus.AKTIV);
         projekt.setMandant(benutzer.getMandant());
+        projekt.getMitarbeitende().add(benutzer);
         projektRepository.save(projekt);
+
+        benutzer.getProjekte().add(projekt);
+        benutzerRepository.save(benutzer);
 
         Aufgabe aufgabe = new Aufgabe();
         aufgabe.setTitel(titel);
