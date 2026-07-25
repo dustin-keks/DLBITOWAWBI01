@@ -17,6 +17,7 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-benutzerliste',
@@ -33,7 +34,8 @@ import {
     MatRowDef,
     MatHeaderCellDef,
     MatCellDef,
-    MatHeaderRowDef
+    MatHeaderRowDef,
+    RouterLink
   ]
 })
 export class BenutzerlisteComponent implements OnInit {
