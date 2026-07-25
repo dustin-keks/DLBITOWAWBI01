@@ -41,11 +41,13 @@ export class ProjektlisteComponent implements OnInit {
   readonly projekte = signal<ProjektResponse[]>([]);
   readonly loading = signal(true);
   readonly fehler = signal<string | null>(null);
+
   readonly kannProjektAnlegen = computed(() =>
     this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   );
   readonly kannProjektArchivieren = this.kannProjektAnlegen;
   readonly kannProjektReaktivieren = this.kannProjektAnlegen;
+  readonly kannFortschrittSehen = this.kannProjektAnlegen
   readonly aktiveProjekte = computed(() =>
     this.projekte().filter((projekt) => projekt.status === 'AKTIV')
   );
