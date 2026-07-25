@@ -8,6 +8,7 @@ import com.example.demo.entity.Benutzer;
 import com.example.demo.service.AufgabeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class AufgabeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')")
     public ResponseEntity<AufgabeResponse> aufgabeAnlegen(@PathVariable UUID projektId,
                                                           @RequestBody AufgabeRequest request,
                                                           @AuthenticationPrincipal Benutzer benutzer) {
@@ -34,6 +36,7 @@ public class AufgabeController {
     }
 
     @PutMapping("/{aufgabeId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')")
     public ResponseEntity<AufgabeResponse> aufgabeAktualisieren(@PathVariable UUID aufgabeId,
                                                                 @RequestBody AufgabeRequest request,
                                                                 @AuthenticationPrincipal Benutzer benutzer) {
@@ -41,6 +44,7 @@ public class AufgabeController {
     }
 
     @DeleteMapping("/{aufgabeId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')")
     public ResponseEntity<Void> aufgabeLoeschen(@PathVariable UUID aufgabeId,
                                                 @AuthenticationPrincipal Benutzer benutzer) {
         aufgabeService.aufgabeLoeschen(aufgabeId, benutzer);
@@ -48,6 +52,7 @@ public class AufgabeController {
     }
 
     @PutMapping("/{aufgabeId}/status")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')")
     public ResponseEntity<AufgabeResponse> statusAendern(@PathVariable UUID aufgabeId,
                                                          @RequestBody AufgabeStatusRequest request,
                                                          @AuthenticationPrincipal Benutzer benutzer) {
@@ -55,6 +60,7 @@ public class AufgabeController {
     }
 
     @PutMapping("/{aufgabeId}/zuweisung")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')")
     public ResponseEntity<AufgabeResponse> aufgabeZuweisen(@PathVariable UUID aufgabeId,
                                                            @RequestBody AufgabeZuweisenRequest request,
                                                            @AuthenticationPrincipal Benutzer benutzer) {
