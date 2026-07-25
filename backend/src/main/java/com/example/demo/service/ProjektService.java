@@ -6,6 +6,7 @@ import com.example.demo.dto.ProjektResponse;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.entity.Projekt;
 import com.example.demo.entity.enums.AufgabeStatus;
+import com.example.demo.entity.enums.BenutzerRolle;
 import com.example.demo.entity.enums.ProjektStatus;
 import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
@@ -14,6 +15,7 @@ import com.example.demo.repository.ProjektRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -121,7 +123,11 @@ public class ProjektService {
         long erledigteAufgaben = projekt.getAufgaben().stream()
                 .filter(aufgabe -> aufgabe.getStatus() == AufgabeStatus.ERLEDIGT)
                 .count();
-        double fortschritt = alleAufgaben == 0 ? 0.0 : (double) erledigteAufgaben / alleAufgaben * 100;
+
+        Double fortschritt = null;
+        if (darfFortschrittSehen()) {
+            fortschritt = alleAufgaben == 0 ? 0.0 : (double) erledigteAufgaben / alleAufgaben * 100;
+        }
 
         List<BenutzerResponse> mitarbeitende = projekt.getMitarbeitende().stream()
                 .map(benutzer -> new BenutzerResponse(benutzer.getId(), benutzer.getName(), benutzer.getEmail(), benutzer.getRolle()))
@@ -146,5 +152,10 @@ public class ProjektService {
         if (!projekt.getMandant().getId().equals(benutzer.getMandant().getId())) {
             throw new AccessDeniedException("Der Benutzer gehört nicht zum selben Mandant wie das Projekt.");
         }
+    }
+
+    private boolean darfFortschrittSehen() {
+        Benutzer aktuellerBenutzer = (Benutzer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return aktuellerBenutzer.getRolle() == BenutzerRolle.ADMIN || aktuellerBenutzer.getRolle() == BenutzerRolle.PROJEKTLEITER;
     }
 }

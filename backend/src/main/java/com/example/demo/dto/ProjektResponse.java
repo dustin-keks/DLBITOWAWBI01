@@ -13,6 +13,6 @@ public class ProjektResponse {
     private UUID id;
     private String name;
     private ProjektStatus status;
-    private double fortschritt;
+    private Double fortschritt;
     private List<BenutzerResponse> mitarbeitende;
 }
