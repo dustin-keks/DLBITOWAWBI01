@@ -64,6 +64,7 @@ public class ProjektService {
                 .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
 
         pruefeRechteZumBearbeiten(projekt);
+        pruefeGleicherMandant(projekt, benutzer);
 
         projekt.getMitarbeitende().add(benutzer);
         benutzer.getProjekte().add(projekt);
@@ -138,6 +139,12 @@ public class ProjektService {
     private void pruefeRechteZumBearbeiten(Projekt projekt) {
         if (projekt.getStatus() == ProjektStatus.ARCHIVIERT) {
             throw new ConflictException("Ein archiviertes Projekt kann nicht bearbeitet werden.");
+        }
+    }
+
+    private void pruefeGleicherMandant(Projekt projekt, Benutzer benutzer) {
+        if (!projekt.getMandant().getId().equals(benutzer.getMandant().getId())) {
+            throw new AccessDeniedException("Der Benutzer gehört nicht zum selben Mandant wie das Projekt.");
         }
     }
 }
