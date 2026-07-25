@@ -77,6 +77,9 @@ export class ProjektdetailComponent implements OnInit {
   readonly kannProjektBearbeiten = computed(() => {
     return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER')
   });
+  readonly kannAufgabenBearbeiten = computed(() => {
+    return this.authService.hasRolle('ADMIN', 'PROJEKTLEITER', 'MITARBEITER')
+  });
   readonly istProjektArchiviert = computed(() => {
     return this.projekt()?.status === 'ARCHIVIERT'
   });
