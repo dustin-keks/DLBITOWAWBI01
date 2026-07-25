@@ -10,8 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLOutput;
-
 @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
@@ -37,8 +35,22 @@ public class DataSeeder implements CommandLineRunner {
         admin.setMandant(mandant);
         benutzerRepository.save(admin);
 
+        Mandant mandant2 = new Mandant();
+        mandant2.setName("Schule für Hexerei und Zauberei");
+        mandantRepository.save(mandant2);
+
+        Benutzer admin2 = new Benutzer();
+        admin2.setName("dumbledore");
+        admin2.setEmail("dumbledore@hogwarts.de");
+        admin2.setPasswort(passwordEncoder.encode("Schokofrosch"));
+        admin2.setRolle(BenutzerRolle.ADMIN);
+        admin2.setMandant(mandant2);
+        benutzerRepository.save(admin2);
+
         System.out.println("Seed Daten angelegt.");
-        System.out.println("Mandant: " + mandant.getName());
+        System.out.println("1. Mandant: " + mandant.getName());
         System.out.println("Benutzer (Admin): " + admin.getEmail());
+        System.out.println("2. Mandant: " + mandant2.getName());
+        System.out.println("Benutzer (Admin): " + admin2.getEmail());
     }
 }
