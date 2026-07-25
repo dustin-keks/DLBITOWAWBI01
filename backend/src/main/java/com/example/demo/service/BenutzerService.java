@@ -6,6 +6,7 @@ import com.example.demo.entity.Benutzer;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.repository.BenutzerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,9 +36,13 @@ public class BenutzerService {
         return buildResponse(benutzerRepository.save(benutzer));
     }
 
-    public BenutzerResponse benutzerAktualisieren(UUID id, BenutzerRequest request) {
+    public BenutzerResponse benutzerAktualisieren(UUID id, BenutzerRequest request, Benutzer admin) {
         Benutzer benutzer = benutzerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden"));
+                .orElseThrow(() -> new NotFoundException("Benutzer nicht gefunden."));
+
+        if (!benutzer.getMandant().getId().equals(admin.getMandant().getId())) {
+            throw new AccessDeniedException("Der Benutzer gehört zu einem anderen Mandanten.");
+        }
 
         benutzer.setName(request.getName());
         benutzer.setEmail(request.getEmail());

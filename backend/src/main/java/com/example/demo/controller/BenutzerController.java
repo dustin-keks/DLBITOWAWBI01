@@ -35,7 +35,8 @@ public class BenutzerController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BenutzerResponse> benutzerAktualisieren(@PathVariable UUID id,
-                                                            @RequestBody BenutzerRequest request) {
-        return ResponseEntity.ok(benutzerService.benutzerAktualisieren(id, request));
+                                                            @RequestBody BenutzerRequest request,
+                                                            @AuthenticationPrincipal Benutzer admin) {
+        return ResponseEntity.ok(benutzerService.benutzerAktualisieren(id, request, admin));
     }
 }
