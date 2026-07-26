@@ -20,7 +20,7 @@ public class BenutzerController {
     private final BenutzerService benutzerService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
     public ResponseEntity<List<BenutzerResponse>> getAlleBenutzer(@AuthenticationPrincipal Benutzer admin) {
         return ResponseEntity.ok(benutzerService.getAlleBenutzer(admin));
     }
