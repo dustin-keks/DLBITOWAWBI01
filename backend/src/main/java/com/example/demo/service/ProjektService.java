@@ -143,6 +143,11 @@ public class ProjektService {
     }
 
     private void pruefeRechteZumBearbeiten(Projekt projekt) {
+        Benutzer aktuellerBenutzer = (Benutzer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!projekt.getMandant().getId().equals(aktuellerBenutzer.getMandant().getId())) {
+            throw new AccessDeniedException("Du hast keinen Zugriff auf dieses Projekt.");
+        }
+
         if (projekt.getStatus() == ProjektStatus.ARCHIVIERT) {
             throw new ConflictException("Ein archiviertes Projekt kann nicht bearbeitet werden.");
         }
