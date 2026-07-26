@@ -21,7 +21,7 @@
     <div class="row">
       @for (projekt of aktiveProjekte(); track projekt.id) {
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-          <mat-card>
+          <mat-card class="mb-3">
             <mat-card-header>
               <mat-card-title>{{ projekt.name }}</mat-card-title>
               <mat-card-subtitle>{{ projekt.status }}</mat-card-subtitle>
@@ -29,7 +29,7 @@
 
             @if (kannFortschrittSehen()) {
               <mat-card-content>
-                <p>Fortschritt: {{ projekt.fortschritt!.toFixed(2) }}</p>
+                <p>Fortschritt: {{ projekt.fortschritt!.toFixed(2) }} %</p>
                 <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
               </mat-card-content>
             }
@@ -64,7 +64,7 @@
   <div class="row">
     @for (projekt of archivierteProjekte(); track projekt.id) {
       <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <mat-card>
+        <mat-card class="mb-3">
           <mat-card-header>
             <mat-card-title>{{ projekt.name }}</mat-card-title>
             <mat-card-subtitle>{{ projekt.status }}</mat-card-subtitle>
@@ -72,7 +72,7 @@
 
           @if (kannFortschrittSehen()) {
             <mat-card-content>
-              <p>Fortschritt: {{ projekt.fortschritt!.toFixed(2) }}</p>
+              <p>Fortschritt: {{ projekt.fortschritt!.toFixed(2) }} %</p>
               <mat-progress-bar mode="determinate" [value]="projekt.fortschritt"></mat-progress-bar>
             </mat-card-content>
           }

@@ -7,6 +7,20 @@
 } @else if (aufgaben().length === 0) {
   <p class="text-danger">Es sind noch keine Aufgaben vorhanden.</p>
 } @else {
+  @if (kannProjektBearbeiten()) {
+    <div class="row">
+      <div class="col-auto">
+        <button matButton="filled"
+                [disabled]="istProjektArchiviert()"
+                (click)="projektBearbeitenDialog()"
+                class="mb-4"
+        >
+          Projekt bearbeiten
+        </button>
+      </div>
+    </div>
+  }
+
   <mat-table [dataSource]="aufgaben()">
     <ng-container matColumnDef="titel">
       <mat-header-cell *matHeaderCellDef>Titel</mat-header-cell>
@@ -86,17 +100,6 @@
       Neue Aufgabe anlegen
     </button>
   </div>
-
-  @if (kannProjektBearbeiten()) {
-    <div class="col-auto">
-      <button matButton="filled"
-              [disabled]="istProjektArchiviert()"
-              (click)="projektBearbeitenDialog()"
-      >
-        Projekt bearbeiten
-      </button>
-    </div>
-  }
 </div>
 
 @if (projekt()?.mitarbeitende?.length) {
