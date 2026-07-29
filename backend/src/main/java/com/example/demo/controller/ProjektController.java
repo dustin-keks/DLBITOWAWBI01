@@ -6,6 +6,7 @@ import com.example.demo.dto.ProjektStatusRequest;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.service.ProjektService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +30,7 @@ public class ProjektController {
     @PreAuthorize("hasAnyRole('ADMIN', 'PROJEKTLEITER')")
     public ResponseEntity<ProjektResponse> projektAnlegen(@RequestBody ProjektRequest request,
                                                           @AuthenticationPrincipal Benutzer benutzer) {
-        return ResponseEntity.ok(projektService.projektAnlegen(request, benutzer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(projektService.projektAnlegen(request, benutzer));
     }
 
     @GetMapping("/{projektId}")

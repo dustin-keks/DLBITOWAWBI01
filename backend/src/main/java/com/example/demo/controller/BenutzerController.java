@@ -5,6 +5,7 @@ import com.example.demo.dto.BenutzerResponse;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.service.BenutzerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,7 +30,7 @@ public class BenutzerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BenutzerResponse> benutzerAnlegen(@RequestBody BenutzerRequest request,
                                                             @AuthenticationPrincipal Benutzer admin) {
-        return ResponseEntity.ok(benutzerService.benutzerAnlegen(request, admin));
+        return ResponseEntity.status(HttpStatus.CREATED).body(benutzerService.benutzerAnlegen(request, admin));
     }
 
     @PutMapping("/{id}")

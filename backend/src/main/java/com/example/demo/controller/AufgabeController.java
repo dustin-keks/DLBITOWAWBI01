@@ -7,6 +7,7 @@ import com.example.demo.dto.AufgabeZuweisenRequest;
 import com.example.demo.entity.Benutzer;
 import com.example.demo.service.AufgabeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,7 +33,7 @@ public class AufgabeController {
     public ResponseEntity<AufgabeResponse> aufgabeAnlegen(@PathVariable UUID projektId,
                                                           @RequestBody AufgabeRequest request,
                                                           @AuthenticationPrincipal Benutzer benutzer) {
-        return ResponseEntity.ok(aufgabeService.aufgabeAnlegen(projektId, request, benutzer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(aufgabeService.aufgabeAnlegen(projektId, request, benutzer));
     }
 
     @PutMapping("/{aufgabeId}")
