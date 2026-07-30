@@ -55,6 +55,9 @@ public class ProjektService {
     public ProjektResponse statusAendern(UUID id, ProjektStatus status) {
         Projekt projekt = projektRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
+
+        pruefeRechteZumBearbeiten(projekt);
+
         projekt.setStatus(status);
         return buildResponse(projektRepository.save(projekt));
     }
