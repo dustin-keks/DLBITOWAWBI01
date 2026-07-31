@@ -9,3 +9,11 @@ Funktionalität: Projektverwaltung durch Projektleiter
     Dann hat das Projekt den Namen "Website Relaunch 2.0"
     Wenn der Projektleiter das Projekt archiviert
     Dann hat das Projekt den Status "ARCHIVIERT"
+
+  Szenario: Projektleiter reaktiviert ein archiviertes Projekt
+    Angenommen ein angemeldeter Projektleiter
+    Wenn der Projektleiter ein Projekt mit dem Namen "Reaktivierbares Projekt" anlegt
+    Wenn der Projektleiter das Projekt archiviert
+    Dann hat das Projekt den Status "ARCHIVIERT"
+    Wenn der Projektleiter das Projekt reaktiviert
+    Dann hat das Projekt den Status "AKTIV"

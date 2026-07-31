@@ -8,6 +8,7 @@ import com.example.demo.entity.enums.ProjektStatus;
 import com.example.demo.repository.BenutzerRepository;
 import com.example.demo.repository.MandantRepository;
 import com.example.demo.repository.ProjektRepository;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.de.Angenommen;
 import io.cucumber.java.de.Dann;
 import io.cucumber.java.de.Wenn;
@@ -120,5 +121,17 @@ public class ProjektverwaltungSteps {
     public void hatDasProjektDenStatus(String erwarteterStatus) {
         Projekt projekt = projektRepository.findById(projektId).orElseThrow();
         Assertions.assertEquals(ProjektStatus.valueOf(erwarteterStatus), projekt.getStatus());
+    }
+
+    @Wenn("der Projektleiter das Projekt reaktiviert")
+    public void derProjektleiterDasProjektReaktiviert() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(Map.of("status", "AKTIV"), headers);
+
+        String url = "http://localhost:" + port + "/api/projekte/" + projektId + "/status";
+        restTemplate.exchange(url, HttpMethod.PATCH, request, Map.class);
     }
 }
