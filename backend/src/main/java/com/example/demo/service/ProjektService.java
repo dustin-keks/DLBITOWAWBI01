@@ -56,7 +56,8 @@ public class ProjektService {
         Projekt projekt = projektRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Projekt nicht gefunden"));
 
-        pruefeRechteZumBearbeiten(projekt);
+        Benutzer aktuellerBenutzer = (Benutzer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        pruefeGleicherMandant(projekt, aktuellerBenutzer);
 
         projekt.setStatus(status);
         return buildResponse(projektRepository.save(projekt));
